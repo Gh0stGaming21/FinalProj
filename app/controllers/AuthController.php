@@ -30,9 +30,24 @@ class AuthController {
                 header("Location: ?page=dashboard");
                 exit;
             }
+
+            if ($_SESSION['user']['role'] !== 'admin') {
+                echo "Unauthorized access";
+                header("Location: ?page=login");
+                exit;
+            }
+            
             $error = "Invalid credentials.";
         }
         include './app/views/auth/login.php';
+
+        if ($user['role'] === 'admin') {
+            header("Location: ?page=admin_dashboard");
+        } else {
+            header("Location: ?page=dashboard");
+        }
+        exit;
+        
     }
 
     public function register() {
