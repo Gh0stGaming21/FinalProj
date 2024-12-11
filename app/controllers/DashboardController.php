@@ -48,11 +48,9 @@ class DashboardController
         $userModel = new User($db);
         $totalUsers = $userModel->getTotalUsers();
 
-        // Fetch recent activities for the user (dummy data here)
         $recentActivities = [
             ['activity' => 'Logged in', 'created_at' => '2024-12-09'],
             ['activity' => 'Updated profile', 'created_at' => '2024-12-08'],
-            // Add more activity records here as necessary
         ];
 
         return [

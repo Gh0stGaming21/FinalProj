@@ -14,7 +14,7 @@ class User {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function authenticateUser($email, $password) {
+    public function authenticateUser ($email, $password) {
         $user = $this->findByEmail($email);
         if ($user && password_verify($password, $user['password'])) {
             if ($user['status'] !== 'active') {
@@ -39,8 +39,6 @@ class User {
             return false;
         }
     }
-    
-
 
     public function getTotalUsers() {
         $stmt = $this->db->query("SELECT COUNT(*) AS total FROM users");

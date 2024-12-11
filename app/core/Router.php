@@ -19,6 +19,8 @@ class Router {
             'forgotpassword' => 'handleForgotPassword',
             'profile' => 'handleProfileView',
             'logout' => 'handleLogout',
+            'events' => 'handleEvents',
+            'resource_sharing' => 'handleResourceSharing',
         ];
 
         if (isset($routeHandlers[$page])) {
@@ -44,17 +46,23 @@ class Router {
     }
 
     private function handleHelpRequests() {
+        if (!class_exists('HelpRequestController')) {
+            echo "HelpRequestController class not found!";
+            exit;
+        }
+    
         $controller = new HelpRequestController();
         $controller->handleFormSubmission();
         $helpRequests = $controller->getHelpRequests();
         $this->loadView('help_requests_list.php', ['helpRequests' => $helpRequests]);
     }
+    
+    
 
 private function handleDashboard() {
-    // Debugging statement to check session
-    var_dump($_SESSION['user']);  // Check if session is being set
+    var_dump($_SESSION['user']);  
     if (!isset($_SESSION['user'])) {
-        echo "No user session found, redirecting to login.";  // Add a debug statement
+        echo "No user session found, redirecting to login.";  
         header("Location: ?page=login");
         exit;
     }

@@ -36,7 +36,6 @@ class HelpRequestController {
                 exit;
             }
 
-            // Validate form fields
             if (empty($_POST['category']) || empty($_POST['description'])) {
                 echo "Error: All fields are required.";
                 exit;

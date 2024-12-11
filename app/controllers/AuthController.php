@@ -34,7 +34,7 @@ class AuthController {
                 exit;
             } if ($user) {
                 $_SESSION['user'] = $user;
-                var_dump($_SESSION['user']);  // Debugging line
+                var_dump($_SESSION['user']); 
                 header("Location: ?page=dashboard");
                 exit;
             } else {
@@ -67,7 +67,7 @@ class AuthController {
     }
 
     public function forgotPassword() {
-
+        
     }
 
     public function logout() {

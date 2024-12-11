@@ -1,1 +1,216 @@
-/* Dashboard style ang ilalagay mo dto including ung mga folder views -> php files na nakalagay duon */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #efefef;
+    color: #252525;
+}
+
+nav {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #fff;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    padding: 0 16px;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.nav-left .left {
+    height: 40px;
+    background: #efefef;
+    border-radius: 20px;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+}
+
+.nav-center {
+    display: flex;
+    align-items: center;
+}
+
+.nav-center a {
+    margin-left: 12px;
+    text-decoration: none;
+}
+
+.nav-center i {
+    background: none;
+    border-radius: 10px;
+    font-size: 22px;
+    padding: 13px 20px;
+    color: #646262;
+    transition: background 0.3s, color 0.3s;
+}
+
+.nav-center .fa-house {
+    color: #3636f8;
+    position: relative;
+}
+
+.nav-center .fa-house::after {
+    content: '';
+    background: #3636f8;
+    width: 100%;
+    height: 2px;
+    bottom: -6px;
+    left: 6px;
+    position: absolute;
+}
+
+.nav-center a:hover i {
+    background: #efefef;
+    color: #252525;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+.nav-right a {
+    margin-left: 8px;
+}
+
+.nav-right i {
+    background: #efefef;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-right a:hover {
+    background: #b9b7b7;
+    border-radius: 50%;
+}
+
+.main-right {
+    width: 23%;
+    height: calc(100vh - 60px);
+    margin: 0;
+    padding: 12px 10px;
+    overflow-y: auto;
+    position: absolute;
+    right: 0;
+    top: 60px;
+}
+
+.main-right::-webkit-scrollbar {
+    width: 7px;
+}
+
+.main-right::-webkit-scrollbar-thumb {
+    border-radius: 20px;
+    background: #f2f2f2;
+}
+
+.main-right:hover::-webkit-scrollbar-thumb {
+    background: #bcbbbb;
+}
+
+.recent {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    cursor: pointer;
+    border-radius: 7px;
+    padding: 10px;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.recent h2 {
+    margin-bottom: 10px;
+}
+
+.recent ul {
+    list-style-type: none;
+    width: 100%;
+}
+
+.recent li {
+    padding: 5px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.recent li:last-child {
+    border-bottom: none;
+}
+
+.create-post{
+    width: 100%;
+    height: auto;
+    background: #fff;
+    padding: 10px 15px;
+    border-radius: 7px;
+    box-shadow: 0 1px 8px rgb(0, 0, 0,0.3);
+    margin: 10px 0;
+
+}
+
+.create-post .ptop{
+    display: flex;
+    align-items: center;
+
+}
+
+.ptop input{
+    width: 90%;
+    padding: 10px;
+    margin-left: 20px;
+    border: 0;
+    outline: none;
+    background: #f2f2f2;
+    border-radius: 30px;
+    font-size: 17px;
+
+}
+
+.ptop input::hover{
+    background: #e3e3e3;
+    cursor: pointer;
+
+}
+
+.pbottom{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 5px auto;
+
+}
+
+.pbottom .post-icon{
+    display: flex;
+    align-items: center;
+    margin: o auto;
+    padding: 7px 40px;
+    cursor: pointer;
+
+}
+
+.pbottom .post-icon:hover{
+    background: #efefef;
+    border-radius: 8px;
+
+}
+
