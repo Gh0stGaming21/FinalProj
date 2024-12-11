@@ -1,4 +1,9 @@
 <?php
+require_once __DIR__ . '/../controllers/HelpRequestController.php';
+require_once __DIR__ . '/../controllers/ResourceSharingController.php';  
+require_once __DIR__ . '/../controllers/EventsController.php';  
+
+
 class Router {
     private $viewsBase;
 
@@ -51,31 +56,35 @@ class Router {
             exit;
         }
     
-        $controller = new HelpRequestController();
-        $controller->handleFormSubmission();
+        $controller = new HelpRequestController(); 
+        $controller->handleFormSubmission(); 
         $helpRequests = $controller->getHelpRequests();
         $this->loadView('help_requests_list.php', ['helpRequests' => $helpRequests]);
     }
     
     
-
-private function handleDashboard() {
-    var_dump($_SESSION['user']);  
-    if (!isset($_SESSION['user'])) {
-        echo "No user session found, redirecting to login.";  
-        header("Location: ?page=login");
-        exit;
+    private function handleDashboard() {
+        var_dump($_SESSION['user']);  
+        if (!isset($_SESSION['user'])) {
+            echo "No user session found, redirecting to login.";  
+            header("Location: ?page=login");
+            exit;
+        }
+    
+        $user = $_SESSION['user'];
+    
+        $database = new Database();
+        $pdo = $database->connect();
+    
+        if ($user['role'] === 'admin') {
+            $controller = new DashboardController($pdo);
+            $pendingRequests = $controller->getPendingRequests();
+            $this->loadView('auth/adminDashboard.php', ['pendingRequests' => $pendingRequests]);
+        } else {
+            $this->loadView('auth/dashboard.php');
+        }
     }
-
-    $user = $_SESSION['user'];
-    if ($user['role'] === 'admin') {
-        $controller = new DashboardController();
-        $pendingRequests = $controller->getPendingRequests();
-        $this->loadView('auth/adminDashboard.php', ['pendingRequests' => $pendingRequests]);
-    } else {
-        $this->loadView('auth/dashboard.php');
-    }
-}
+    
 
     
     private function handleRegister() {
@@ -104,6 +113,36 @@ private function handleDashboard() {
     private function show404() {
         header('HTTP/1.0 404 Not Found');
         echo "<h1>404 - Page Not Found</h1>";
+    } 
+    private function handleEvents() {
+        $filters = [];
+        
+        if (isset($_GET['location']) && !empty($_GET['location'])) {
+            $filters['location'] = $_GET['location'];
+        }
+        if (isset($_GET['date']) && !empty($_GET['date'])) {
+            $filters['date'] = $_GET['date'];
+        }
+    
+        $controller = new EventsController();
+        $events = $controller->getEvents($filters);
+        $this->loadView('events.php', ['events' => $events]);
     }
+    
+
+    private function handleResourceSharing() {
+        if (!class_exists('ResourceSharingController')) {
+            echo "ResourceSharingController class not found!";
+            exit;
+        }
+    
+        $controller = new ResourceSharingController(); 
+        $resourceSharingData = $controller->getResourceSharingData(); 
+    
+        $this->loadView('resource_sharing.php', ['resourceSharingData' => $resourceSharingData]);
+    }
+    
+    
+    
 }
 ?>

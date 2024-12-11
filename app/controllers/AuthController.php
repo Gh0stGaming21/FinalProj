@@ -1,6 +1,6 @@
 <?php
-require_once './app/models/User.php';
-require_once './config/Database.php';
+require_once './app/models/User.php';  
+require_once './config/Database.php';  
 
 class AuthController {
     private $db;
@@ -42,7 +42,6 @@ class AuthController {
                 header("Location: ?page=login");
                 exit;
             }
-            
         }
     
         include './app/views/auth/login.php';
@@ -54,7 +53,7 @@ class AuthController {
             $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
             $password = trim($_POST['password']);
 
-            if ($this->userModel->create($name, $email, $password)) {
+            if ($this->userModel->register($name, $email, $password)) {
                 $_SESSION['success'] = "Registration successful! You can now log in.";
                 header("Location: ?page=login");
                 exit;
@@ -71,7 +70,6 @@ class AuthController {
     }
 
     public function logout() {
-       
         session_start();
         session_unset();
         session_destroy();

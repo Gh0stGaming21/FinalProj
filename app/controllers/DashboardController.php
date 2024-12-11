@@ -1,31 +1,35 @@
 <?php
-require_once __DIR__ . '/../../config/Database.php';
-require_once __DIR__ . '/../models/User.php';
+require_once './config/Database.php';  // Ensure Database class is included
+require_once './app/models/User.php';  // Ensure User model is included
 
 class DashboardController
 {
+    private $pdo;
+
+    public function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+    }
+
     public function getPendingRequests()
     {
-        $database = new Database();
-        $pdo = $database->connect();
-
         try {
-            $stmt = $pdo->query("SELECT 
-                                    hr.id, 
-                                    hr.user AS request_user, 
-                                    hr.category, 
-                                    hr.description, 
-                                    hr.status, 
-                                    hr.created_at,
-                                    u.name AS user_name, 
-                                    u.email AS user_email
-                                  FROM help_requests hr
-                                  INNER JOIN users u ON hr.user_id = u.id
-                                  WHERE hr.status = 'open'
-                                  ORDER BY hr.created_at DESC");
+            $stmt = $this->pdo->query("SELECT 
+                                        hr.id, 
+                                        hr.user AS request_user, 
+                                        hr.category, 
+                                        hr.description, 
+                                        hr.status, 
+                                        hr.created_at,
+                                        u.name AS user_name, 
+                                        u.email AS user_email
+                                    FROM help_requests hr
+                                    INNER JOIN users u ON hr.user_id = u.id
+                                    WHERE hr.status = 'open'
+                                    ORDER BY hr.created_at DESC");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            echo "Error fetching pending requests: " . $e->getMessage();
+            error_log("Error fetching pending requests: " . $e->getMessage()); // Log the error
             return [];
         }
     }
@@ -43,7 +47,7 @@ class DashboardController
 
         $user = $_SESSION['user'];
         $database = new Database();
-        $db = $database->connect();
+        $db = $database->connect(); 
 
         $userModel = new User($db);
         $totalUsers = $userModel->getTotalUsers();

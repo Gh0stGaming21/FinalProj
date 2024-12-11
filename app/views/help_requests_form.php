@@ -8,10 +8,8 @@
 <body>
     <h1>Help Requests</h1>
 
-    <!-- Help Request Submission Form -->
     <h2>Submit a Help Request</h2>
     <form action="?page=help_requests" method="POST">
-        <!-- User ID Prompt -->
         <?php if (isset($_SESSION['user'])): ?>
             <p><strong>User:</strong> <?= htmlspecialchars($_SESSION['user']['name']) ?> (ID: <?= htmlspecialchars($_SESSION['user']['id']) ?>)</p>
             <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['user']['id']) ?>">
