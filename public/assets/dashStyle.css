@@ -38,7 +38,7 @@ nav {
 }
 
 .nav-center {
-    display: flex;
+ display: flex;
     align-items: center;
 }
 
@@ -101,28 +101,32 @@ nav {
     border-radius: 50%;
 }
 
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 60px; /* adjust the margin to match the height of the nav bar */
+}
+
+.main-left {
+    width: 60%;
+    margin: 10px;
+    padding-left: 20px; /* Added left padding for space */
+}
+
 .main-right {
-    width: 23%;
-    height: calc(100vh - 60px);
-    margin: 0;
-    padding: 12px 10px;
+    width: 30%;
+    margin: 10px;
     overflow-y: auto;
-    position: absolute;
-    right: 0;
-    top: 60px;
+    height: calc(100vh - 60px);
 }
 
-.main-right::-webkit-scrollbar {
-    width: 7px;
-}
-
-.main-right::-webkit-scrollbar-thumb {
-    border-radius: 20px;
-    background: #f2f2f2;
-}
-
-.main-right:hover::-webkit-scrollbar-thumb {
-    background: #bcbbbb;
+.create-post {
+    width: 100%;
+    height: auto;
+    background: #fff;
+    padding: 10px 15px;
+    border-radius: 7px;
+    box-shadow: 0 1px 8px rgb(0, 0, 0,0.3);
 }
 
 .recent {
@@ -156,61 +160,22 @@ nav {
     border-bottom: none;
 }
 
-.create-post{
-    width: 100%;
-    height: auto;
-    background: #fff;
-    padding: 10px 15px;
-    border-radius: 7px;
-    box-shadow: 0 1px 8px rgb(0, 0, 0,0.3);
-    margin: 10px 0;
-
-}
-
-.create-post .ptop{
-    display: flex;
-    align-items: center;
-
-}
-
-.ptop input{
-    width: 90%;
-    padding: 10px;
-    margin-left: 20px;
-    border: 0;
-    outline: none;
-    background: #f2f2f2;
-    border-radius: 30px;
-    font-size: 17px;
-
-}
-
-.ptop input::hover{
-    background: #e3e3e3;
-    cursor: pointer;
-
-}
-
-.pbottom{
+.pbottom {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     margin: 5px auto;
-
 }
 
-.pbottom .post-icon{
+.pbottom .post-icon {
     display: flex;
     align-items: center;
-    margin: o auto;
+    margin: 0 auto;
     padding: 7px 40px;
     cursor: pointer;
-
 }
 
-.pbottom .post-icon:hover{
+.pbottom .post-icon:hover {
     background: #efefef;
     border-radius: 8px;
-
 }
-

@@ -3,7 +3,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-
 if (!isset($_SESSION['user'])) {
     header('Location: login.php'); 
     exit();
@@ -30,64 +29,62 @@ if (!isset($_SESSION['user'])) {
                 </div>
             </div>
 
-                <div class="nav-center">
-                    <a href="?page=dashboard"><i class="fa-solid fa-house"></i></a>
-                    <a href="?page=help_requests"><i class="fa-solid fa-tv"></i></a>
-                    <a href="?page=resource_sharing"><i class="fa-solid fa-share"></i></a>
-                    <a href="?page=events"><i class="fa-solid fa-calendar"></i></a>
-                </div>
+            <div class="nav-center">
+                <a href="?page=dashboard"><i class="fa-solid fa-house"></i></a>
+                <a href="?page=help_requests"><i class="fa-solid fa-tv"></i></a>
+                <a href="?page=resource_sharing"><i class="fa-solid fa-share"></i></a>
+                <a href="?page=events"><i class="fa-solid fa-calendar"></i></a>
+            </div>
 
-                <div class="nav-right">
-                    <a href="?page=profile"><i class="fa-solid fa-user"></i></a>
-                    <a href="?page=logout"><i class="fa-solid fa-right-from-bracket"></i></a>
-
-                </div>
-
+            <div class="nav-right">
+                <a href="?page=profile"><i class="fa-solid fa-user"></i></a>
+                <a href="?page=logout"><i class="fa-solid fa-right-from-bracket"></i></a>
             </div>
         </nav>  
 
-    <div class="main-right">
-        <div class="recent">
-        <h2>Recent Activities</h2>
-            <ul>
-                <?php if (!empty($recentActivities)): ?>
-                    <?php foreach ($recentActivities as $activity): ?>
-                        <li>
-                            <?= htmlspecialchars($activity['activity']) ?> - <?= htmlspecialchars($activity['created_at']) ?>
-                        </li>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <li>No recent activities.</li>
-                <?php endif; ?>
-            </ul>
+        <div class="main-content">
+            <div class="main-left">
+                <div class="create-post">
+                    <div class="ptop">
+                        <input type="text" placeholder="What's your request?">
+                    </div>
+                    <div class="pbottom">
+                        <div class="post-icon">
+                            <i class="fa-solid fa-video red"></i>
+                            <p>Live Video</p>
+                        </div>
 
+                        <div class="post-icon">
+                            <i class="fa-solid fa-images green"></i>
+                            <p>Image Post</p>
+                        </div>
 
+                        <div class="post-icon">
+                            <i class="fa-solid fa-face-grin yellow"></i>
+                            <p>Emoji Post</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-right">
+                <div class="recent">
+                    <h2>Recent Activities</h2>
+                    <ul>
+                        <?php if (!empty($recentActivities)): ?>
+                            <?php foreach ($recentActivities as $activity): ?>
+                                <li>
+                                    <?= htmlspecialchars($activity['activity']) ?> - <?= htmlspecialchars($activity['created_at']) ?>
+                                </li>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <li>No recent activities.</li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
-    
 
-    <div class="create-post">
-       <div class="ptop">
-            <input type="text" placehoder="What's your request?">
-        </div>
-        <div class="pbotton">
-            <div class="post-icon">
-            <i class="fa-solid fa-video red"></i>
-            <p>Live Video</p>
-            </div>
-
-            <div class="post-icon">
-                <i class="fa-solid fa-images green"></i>
-                <p>Live Video</p>
-            </div>
-
-            <div class="post-icon">
-                <i class="fa-solid fa-face-grin yellow"></i>
-                <p>Live Video</p>
-            </div>
-
-        </div>
-
-    </div>
 </body>
 </html>
