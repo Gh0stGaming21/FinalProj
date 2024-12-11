@@ -1,25 +1,24 @@
 <?php
-require_once __DIR__ . '/../controllers/HelpRequestController.php';
-require_once __DIR__ . '/../controllers/DashboardController.php';
-require_once __DIR__ . '/../controllers/AuthController.php';
-
 class Router {
     private $viewsBase;
 
     public function __construct() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         $this->viewsBase = __DIR__ . '/../../views';
     }
 
     public function route() {
         $page = strtolower($_GET['page'] ?? 'login');
         $routeHandlers = [
+            'login' => 'handleLogin',
             'help_requests' => 'handleHelpRequests',
             'dashboard' => 'handleDashboard',
             'register' => 'handleRegister',
             'forgotpassword' => 'handleForgotPassword',
             'profile' => 'handleProfileView',
             'logout' => 'handleLogout',
-            'login' => 'handleLogin',
         ];
 
         if (isset($routeHandlers[$page])) {
@@ -30,28 +29,47 @@ class Router {
     }
 
     private function handleLogin() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $controller = new AuthController();
+            $controller->login();
+        } else {
+           
+            $this->loadView('auth/login.php');
+        }
+    }
+
+    private function handleLogout() {
         $controller = new AuthController();
-        $controller->login();
+        $controller->logout();
     }
 
     private function handleHelpRequests() {
         $controller = new HelpRequestController();
-        $controller->handleFormSubmission(); 
+        $controller->handleFormSubmission();
         $helpRequests = $controller->getHelpRequests();
         $this->loadView('help_requests_list.php', ['helpRequests' => $helpRequests]);
     }
 
-    private function handleDashboard() {
-        if ($_SESSION['user']['role'] === 'admin') {
-            $controller = new DashboardController();
-            $pendingRequests = $controller->getPendingRequests();
-            $this->loadView('auth/adminDashboard.php', ['pendingRequests' => $pendingRequests]);
-        } else {
-            $this->loadView('auth/dashboard.php');
-        }
+private function handleDashboard() {
+    // Debugging statement to check session
+    var_dump($_SESSION['user']);  // Check if session is being set
+    if (!isset($_SESSION['user'])) {
+        echo "No user session found, redirecting to login.";  // Add a debug statement
+        header("Location: ?page=login");
+        exit;
     }
-    
 
+    $user = $_SESSION['user'];
+    if ($user['role'] === 'admin') {
+        $controller = new DashboardController();
+        $pendingRequests = $controller->getPendingRequests();
+        $this->loadView('auth/adminDashboard.php', ['pendingRequests' => $pendingRequests]);
+    } else {
+        $this->loadView('auth/dashboard.php');
+    }
+}
+
+    
     private function handleRegister() {
         $controller = new AuthController();
         $controller->register();
@@ -72,17 +90,6 @@ class Router {
         } else {
             echo "View file not found or path is incorrect: $fullPath<br>";
             $this->show404();
-        }
-    }
-
-    private function validateRole($role) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== $role) {
-            header("Location: ?page=login");
-            exit;
         }
     }
 

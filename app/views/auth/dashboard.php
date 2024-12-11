@@ -15,7 +15,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 <body>
     <header>
-        <h1>Welcome, <?= htmlspecialchars($_SESSION['user']['name']) ?>!</h1>
+        <h1>Welcome, <?= htmlspecialchars($_SESSION['user']['name']) ?></h1>
     </header>
 
     <nav>
@@ -25,7 +25,7 @@ if (session_status() === PHP_SESSION_NONE) {
             <li><a href="?page=resource_sharing">Resource Sharing</a></li>
             <li><a href="?page=events">Events Calendar</a></li>
             <li><a href="?page=profile">Profile</a></li>
-            <li><a href="?page=auth&action=logout">Logout</a></li>
+            <li><a href="?page=logout">Logout</a></li>
         </ul>
     </nav>
 
@@ -36,13 +36,17 @@ if (session_status() === PHP_SESSION_NONE) {
         </section>
 
         <section>
-            <h3>Recent Activities</h3>
+        <h2>Recent Activities</h2>
             <ul>
-                <?php foreach ($recentActivities as $activity): ?>
-                    <li>
-                        <?= htmlspecialchars($activity['date']) ?> - <?= htmlspecialchars($activity['activity']) ?>
-                    </li>
-                <?php endforeach; ?>
+                <?php if (!empty($recentActivities)): ?>
+                    <?php foreach ($recentActivities as $activity): ?>
+                        <li>
+                            <?= htmlspecialchars($activity['activity']) ?> - <?= htmlspecialchars($activity['created_at']) ?>
+                        </li>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <li>No recent activities.</li>
+                <?php endif; ?>
             </ul>
         </section>
     </main>

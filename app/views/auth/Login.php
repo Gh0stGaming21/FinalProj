@@ -1,6 +1,7 @@
 <?php
-if (isset($error)) {
-    echo '<p class="error">' . htmlspecialchars($error) . '</p>';
+if (isset($_SESSION['error'])) {
+    echo '<p class="error">' . htmlspecialchars($_SESSION['error']) . '</p>';
+    unset($_SESSION['error']); // Clear the error after displaying it
 }
 ?>
 
@@ -10,7 +11,7 @@ if (isset($error)) {
 <div class="container" id="container">
     <!-- Sign In Form -->
     <div class="form-container sign-in-container">
-        <form action="?page=Login" method="POST">
+        <form action="?page=login" method="POST">
             <h1>Sign in</h1>
             <div class="social-container">
                 <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -20,7 +21,7 @@ if (isset($error)) {
             <span>or use your account</span>
             <div class="infield">
                 <input type="text" placeholder="Email" name="email" required />
-                <label></label>
+                <label></ label>
             </div>
             <div class="infield">
                 <input type="password" placeholder="Password" name="password" required />
@@ -74,8 +75,6 @@ if (isset($error)) {
     </div>  
 </div>
 
-
-
 <script>
     const container = document.getElementById('container');
     const overlayBtn = document.getElementById('overlayBtn');
@@ -87,6 +86,4 @@ if (isset($error)) {
             overlayBtn.classList.add('btnScaled');
         });
     });
-</script>
-
 </script>
