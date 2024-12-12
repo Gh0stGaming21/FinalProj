@@ -1,20 +1,43 @@
 <?php
 class ResourceSharingController {
-    private $pdo;
-
-    public function __construct() {
+    
+    // Example method to get resources with optional filters
+    public function getResources($filters = []) {
+        // You can replace this with your database logic to fetch resources.
+        // For example, using PDO to query a database
+        
         $database = new Database();
-        $this->pdo = $database->connect();
-    }
-
-    public function getResourceSharingData() {
-        try {
-            $stmt = $this->pdo->query("SELECT * FROM resources ORDER BY created_at DESC");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            error_log("Error fetching resource sharing data: " . $e->getMessage());
-            return [];
+        $pdo = $database->connect();
+        
+        // Start building the SQL query
+        $sql = "SELECT * FROM resources"; // Replace 'resources' with your actual table name
+        
+        if (!empty($filters)) {
+            $sql .= " WHERE 1=1";
+            
+            // Add filters to the query
+            if (isset($filters['location'])) {
+                $sql .= " AND location LIKE :location";
+            }
+            if (isset($filters['date'])) {
+                $sql .= " AND date = :date";
+            }
         }
+
+        // Prepare and execute the query
+        $stmt = $pdo->prepare($sql);
+
+        // Bind values for filters
+        if (isset($filters['location'])) {
+            $stmt->bindValue(':location', '%' . $filters['location'] . '%');
+        }
+        if (isset($filters['date'])) {
+            $stmt->bindValue(':date', $filters['date']);
+        }
+
+        // Execute the query and fetch the results
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); // Assuming you want an associative array of resources
     }
 }
 ?>

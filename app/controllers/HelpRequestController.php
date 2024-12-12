@@ -1,67 +1,76 @@
 <?php
+
 require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../models/HelpRequestModel.php';
 
 class HelpRequestController {
-    private $pdo;
+    private $helpRequestModel;
 
     public function __construct() {
         $database = new Database();
-        $this->pdo = $database->connect();
+        $pdo = $database->connect();
+        $this->helpRequestModel = new HelpRequestModel($pdo);
     }
 
+    /**
+     * Fetch and return all help requests.
+     */
     public function getHelpRequests() {
         try {
-            $stmt = $this->pdo->query("
-                SELECT hr.id, hr.category, hr.description, hr.status, hr.created_at, u.name AS user_name
-                FROM help_requests hr
-                JOIN users u ON hr.user_id = u.id
-                ORDER BY hr.created_at DESC
-            ");
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
+            return $this->helpRequestModel->getAllHelpRequests();
+        } catch (Exception $e) {
             error_log("Error fetching help requests: " . $e->getMessage());
             return [];
         }
     }
 
+    /**
+     * Handle help request form submissions.
+     */
     public function handleFormSubmission() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
+            $this->ensureSessionIsValid();
 
-            if (!isset($_SESSION['user']) || intval($_SESSION['user']['id']) !== intval($_POST['user_id'])) {
-                error_log("Invalid user session or mismatched user ID.");
-                echo "Error: Invalid user.";
-                exit;
-            }
+            $userId = $_SESSION['user']['id'] ?? null;
+            $category = trim($_POST['category'] ?? '');
+            $description = trim($_POST['description'] ?? '');
 
-            if (empty($_POST['category']) || empty($_POST['description'])) {
-                echo "Error: All fields are required.";
-                exit;
+            if (empty($category) || empty($description)) {
+                $this->redirectWithError("All fields are required.", "?page=help_requests");
             }
-
-            $userId = intval($_SESSION['user']['id']);
-            $category = trim($_POST['category']);
-            $description = trim($_POST['description']);
 
             try {
-                $stmt = $this->pdo->prepare("
-                    INSERT INTO help_requests (user_id, category, description, status, created_at)
-                    VALUES (:user_id, :category, :description, 'open', NOW())
-                ");
-                $stmt->execute([
-                    ':user_id' => $userId,
-                    ':category' => $category,
-                    ':description' => $description,
-                ]);
-
+                $this->helpRequestModel->createHelpRequest($userId, $category, $description);
                 header("Location: ?page=help_requests");
                 exit;
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 error_log("Error submitting help request: " . $e->getMessage());
-                echo "Error submitting the help request.";
+                $this->redirectWithError("An error occurred. Please try again.", "?page=help_requests");
             }
         }
+    }
+
+    /**
+     * Ensure the session is valid and the user is authenticated.
+     */
+    private function ensureSessionIsValid() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['user']) || intval($_SESSION['user']['id']) !== intval($_POST['user_id'] ?? 0)) {
+            error_log("Invalid user session or mismatched user ID.");
+            echo "Error: Invalid user.";
+            exit;
+        }
+    }
+
+    /**
+     * Redirect with an error message.
+     */
+    private function redirectWithError($message, $redirectUrl) {
+        $_SESSION['error'] = $message;
+        header("Location: $redirectUrl");
+        exit;
     }
 }

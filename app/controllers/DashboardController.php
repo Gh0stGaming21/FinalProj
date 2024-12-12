@@ -1,6 +1,6 @@
 <?php
-require_once './config/Database.php';  // Ensure Database class is included
-require_once './app/models/User.php';  // Ensure User model is included
+require_once './config/Database.php';  
+require_once './app/models/User.php';  
 
 class DashboardController
 {

@@ -8,9 +8,9 @@ if (isset($_SESSION['error'])): ?>
 <?php endif; ?>
 
 <h1>Community Events</h1>
-<form method="GET" action="">
-    <input type="text" name="location" placeholder="Filter by location">
-    <input type="date" name="date" placeholder="Filter by date">
+<form method="GET" action="?page=events">
+    <input type="text" name="location" placeholder="Filter by location" value="<?php echo htmlspecialchars($filters['location'] ?? ''); ?>">
+    <input type="date" name="date" placeholder="Filter by date" value="<?php echo htmlspecialchars($filters['date'] ?? ''); ?>">
     <button type="submit">Filter</button>
     <a href="?page=dashboard">Back to Dashboard</a>
 </form>
@@ -33,4 +33,3 @@ if (isset($_SESSION['error'])): ?>
 <?php else: ?>
     <p>No events found. Please adjust your filters or check back later.</p>
 <?php endif; ?>
-

@@ -1,13 +1,23 @@
 <?php
+
 class Database {
-    private $host = 'localhost';
-    private $db_name = 'bayanihub';
-    private $username = 'root';
-    private $password = '';
-    public $conn;
+    private $host;
+    private $db_name;
+    private $username;
+    private $password;
+    private $conn;
+
+    public function __construct() {
+        $this->host = getenv('DB_HOST') ?: 'localhost';
+        $this->db_name = getenv('DB_NAME') ?: 'bayanihub';
+        $this->username = getenv('DB_USER') ?: 'root';
+        $this->password = getenv('DB_PASS') ?: '';
+    }
 
     public function connect() {
-        if ($this->conn) return $this->conn;
+        if ($this->conn) {
+            return $this->conn;
+        }
 
         try {
             $this->conn = new PDO(
@@ -17,11 +27,22 @@ class Database {
             );
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            echo "Database connection failed: " . $e->getMessage();
-            exit();
+            error_log("Database connection error: " . $e->getMessage(), 3, __DIR__ . '/logs/database.log');
+            die("An error occurred while connecting to the database.");
         }
-        
+
         return $this->conn;
     }
+
+    public function validateAdminAccess() {
+        session_start();
+        if (!isset($_SESSION['user']) || $_SESSION['member']['role'] !== 'admin') {
+            header("HTTP/1.1 403 Forbidden");
+            echo "Unauthorized access.";
+            exit;
+        }
+    }
 }
+
 ?>
+

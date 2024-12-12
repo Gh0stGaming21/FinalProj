@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 10, 2024 at 08:41 PM
+-- Generation Time: Dec 12, 2024 at 05:43 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -66,6 +66,13 @@ CREATE TABLE `help_requests` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `help_requests`
+--
+
+INSERT INTO `help_requests` (`id`, `user`, `user_id`, `category`, `description`, `status`, `created_at`) VALUES
+(4, '', 11, 'Education', 'New Books', 'open', '2024-12-12 04:27:31');
+
 -- --------------------------------------------------------
 
 --
@@ -105,8 +112,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`, `reset_token`, `token_expiry`, `role`, `status`) VALUES
-(4, 'User_main', 'mainuser@gmail.com', '$2y$10$K7O9v0At9rB.OW1bX6vhg.kwJ0.yCqGOOmJNvvXdps/KhTBjE9NgK', '2024-12-10 09:56:18', 'a3b4e1401f56a87cd9c00dd085c299d3', '2024-12-10 19:19:35', 'member', 'active'),
-(5, 'admin', 'admin@gmail.com', 'admin123', '2024-12-10 11:21:13', NULL, NULL, 'admin', 'active');
+(11, 'new', 'new@gmail.com', '$2y$10$y70ErE3hZ9ql2yzYpOdSwuSzJWoVtP/0wQiP0Smyzm5MVaovB3ks.', '2024-12-11 15:16:42', NULL, NULL, 'member', 'active'),
+(12, 'admin', 'admin@gmail.com', 'admin123', '2024-12-12 04:42:53', NULL, NULL, 'admin', 'active');
 
 --
 -- Indexes for dumped tables
@@ -132,7 +139,7 @@ ALTER TABLE `event_rsvps`
 --
 ALTER TABLE `help_requests`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `fk_user_id` (`user_id`);
 
 --
 -- Indexes for table `resources`
@@ -168,7 +175,7 @@ ALTER TABLE `event_rsvps`
 -- AUTO_INCREMENT for table `help_requests`
 --
 ALTER TABLE `help_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `resources`
@@ -180,7 +187,7 @@ ALTER TABLE `resources`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- Constraints for dumped tables
@@ -203,6 +210,7 @@ ALTER TABLE `event_rsvps`
 -- Constraints for table `help_requests`
 --
 ALTER TABLE `help_requests`
+  ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `help_requests_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --

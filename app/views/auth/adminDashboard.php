@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="/public/asstes/adminstyles.css"> 
+    <link rel="stylesheet" href="/public/assets/adminstyles.css"> 
 </head>
 <body>
     <h1>Admin Dashboard</h1>
@@ -23,7 +23,7 @@
             <?php if (!empty($pendingRequests)): ?>
                 <?php foreach ($pendingRequests as $request): ?>
                     <tr>
-                        <td><?= htmlspecialchars($request['user']) ?></td>
+                        <td><?= htmlspecialchars($request['user_name']) ?></td>
                         <td><?= htmlspecialchars($request['category']) ?></td>
                         <td><?= htmlspecialchars($request['description']) ?></td>
                         <td><?= htmlspecialchars($request['created_at']) ?></td>
