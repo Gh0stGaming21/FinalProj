@@ -29,9 +29,15 @@ class DashboardController
                                     ORDER BY hr.created_at DESC");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            error_log("Error fetching pending requests: " . $e->getMessage()); // Log the error
+            error_log("Error fetching pending requests: " . $e->getMessage()); 
             return [];
         }
+    }
+
+    public function getRecentActivities() {
+        $stmt = $this->pdo->prepare("SELECT * FROM activities ORDER BY created_at DESC LIMIT 10");
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
     public function getUserDashboardData()

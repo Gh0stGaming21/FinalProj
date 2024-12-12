@@ -7,6 +7,18 @@ if (!isset($_SESSION['user'])) {
     header('Location: login.php'); 
     exit();
 }
+
+$db = new Database();
+$pdo = $db->connect();
+$db->validateAdminAccess();
+
+$posts = $pdo->prepare("SELECT * FROM posts ORDER BY created_at DESC");
+$posts->execute();
+$posts = $posts->fetchAll();
+
+$recentActivities = $pdo->prepare("SELECT * FROM activities ORDER BY created_at DESC");
+$recentActivities->execute();
+$recentActivities = $recentActivities->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +37,7 @@ if (!isset($_SESSION['user'])) {
         <nav>
             <div class="nav-left">
                 <div class='left'>
-                    <h1>Welcome, <?= isset($_SESSION['user']['name']) ? htmlspecialchars($_SESSION['user']['name']) : 'Guest' ?></h1>
+                <h1>Welcome, <?= isset($_SESSION['user']) && is_array($_SESSION['user']) && isset($_SESSION['user']['name']) ? htmlspecialchars($_SESSION['user']['name']) : 'Guest' ?></h1>
                 </div>
             </div>
 
@@ -45,25 +57,32 @@ if (!isset($_SESSION['user'])) {
         <div class="main-content">
             <div class="main-left">
                 <div class="create-post">
-                    <div class="ptop">
-                        <input type="text" placeholder="What's your request?">
-                    </div>
-                    <div class="pbottom">
-                        <div class="post-icon">
-                            <i class="fa-solid fa-video red"></i>
-                            <p>Live Video</p>
+                    <form method="POST" action="?page=create_post" enctype="multipart/form-data">
+                        <div class="ptop">
+                            <textarea name="post_text" placeholder="What's your request?"></textarea>
                         </div>
+                        <div class="pbottom">
+                            <div class="post-icon">
+                                <input type="file" name="post_video" accept="video/*">
+                                <i class="fa-solid fa-video ```php
+                                red"></i>
+                                <p>Live Video</p>
+                            </div>
 
-                        <div class="post-icon">
-                            <i class="fa-solid fa-images green"></i>
-                            <p>Image Post</p>
-                        </div>
+                            <div class="post-icon">
+                                <input type="file" name="post_image" accept="image/*">
+                                <i class="fa-solid fa-images green"></i>
+                                <p>Image Post</p>
+                            </div>
 
-                        <div class="post-icon">
-                            <i class="fa-solid fa-face-grin yellow"></i>
-                            <p>Emoji Post</p>
+                            <div class="post-icon">
+                                <input type="radio" name="post_type" value="text">
+                                <i class="fa-solid fa-face-grin yellow"></i>
+                                <p>Status Post</p>
+                            </div>
                         </div>
-                    </div>
+                        <button type="submit">Post</button>
+                    </form>
                 </div>
             </div>
 
@@ -82,6 +101,30 @@ if (!isset($_SESSION['user'])) {
                         <?php endif; ?>
                     </ul>
                 </div>
+
+                <div class="posts">
+    <h2>Posts</h2>
+    <ul>
+        <?php if (!empty($posts)): ?>
+            <?php foreach ($posts as $post): ?>
+                <li>
+                    <h3><?= htmlspecialchars($post['post_text']) ?></h3>
+                    <?php if ($post['post_image']): ?>
+                        <?php if (file_exists($post['post_image'])): ?>
+                            <img src="<?= htmlspecialchars($post['post_image']) ?>" alt="Post Image">
+                        <?php else: ?>
+                            <p>Error: Image file not found.</p>
+                        <?php endif; ?>
+                    <?php elseif ($post['post_video']): ?>
+                        <video src="<?= htmlspecialchars($post['post_video']) ?>" alt="Post Video"></video>
+                    <?php endif; ?>
+                </li>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <li>No posts.</li>
+        <?php endif; ?>
+    </ul>
+</div>
             </div>
         </div>
     </div>

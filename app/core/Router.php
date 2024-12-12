@@ -14,20 +14,21 @@ class Router {
     }
 
     public function route() {
-        // Normalize the page query parameter to avoid case issues
+        
         $page = strtolower($_GET['page'] ?? 'login');
     
         $routeHandlers = [
             'login' => 'handleLogin',
             'help_requests' => 'handleHelpRequests',
             'dashboard' => 'handleDashboard',
-            'admindashboard' => 'handleAdminDashboard', // Lowercase for uniformity
+            'admindashboard' => 'handleAdminDashboard',
             'register' => 'handleRegister',
             'forgotpassword' => 'handleForgotPassword',
             'profile' => 'handleProfileView',
             'logout' => 'handleLogout',
             'events' => 'handleEvents',
             'resource_sharing' => 'handleResourceSharing',
+            'create_post' => 'handleCreatePost',
         ];
     
         if (isset($routeHandlers[$page])) {
@@ -85,22 +86,53 @@ class Router {
             header("Location: ?page=login");
             exit;
         }
-
+    
         $user = $_SESSION['user'];
-
+    
         $database = new Database();
         $pdo = $database->connect();
-
+    
         if ($user['role'] === 'admin') {
             $controller = new DashboardController($pdo);
             $pendingRequests = $controller->getPendingRequests();
             $this->loadView('auth/adminDashboard.php', ['pendingRequests' => $pendingRequests]);
         } elseif ($user['role'] === 'member') {
-            $this->loadView('auth/dashboard.php');
-        } else {
-            header('Location: ?page=login');
+            $controller = new DashboardController($pdo);
+            $recentActivities = $controller->getRecentActivities();
+            $this->loadView('auth/dashboard.php', ['recentActivities' => $recentActivities]);
         }
     }
+    
+    private function handleCreatePost() {
+        if (!isset($_SESSION['user'])) {
+            echo "No user session found. Redirecting to login.";
+            header("Location: ?page=login");
+            exit;
+        }
+    
+        $user = $_SESSION['user'];
+    
+        $database = new Database();
+        $pdo = $database->connect();
+    
+        $controller = new PostController($pdo);
+        $postType = $_POST['post_type'] ?? null;
+        $postText = $_POST['post_text'] ?? null;
+        $postVideo = $_FILES['post_video'] ?? null;
+        $postImage = $_FILES['post_image'] ?? null;
+    
+        if ($postType === 'text') {
+            $controller->createTextPost($user['id'], $postText);
+        } elseif ($postVideo) {
+            $controller->createVideoPost($user['id'], $postVideo);
+        } elseif ($postImage) {
+            $controller->createImagePost($user['id'], $postImage);
+        }
+    
+        header("Location: ?page=dashboard");
+        exit;
+    }
+
 
     private function handleRegister() {
         $controller = new AuthController();
@@ -171,7 +203,7 @@ class Router {
             exit;
         }
 
-        $user = $_SESSION['user']; // No var_dump here
+        $user = $_SESSION['user']; 
 
         $database = new Database();
         $pdo = $database->connect();
@@ -202,6 +234,43 @@ class Router {
         $controller = new DashboardController($pdo);
         $pendingRequests = $controller->getPendingRequests();
         $this->loadView('auth/adminDashboard.php', ['pendingRequests' => $pendingRequests]);
+    }
+}
+
+class PostController {
+    private $pdo;
+
+    public function __construct($pdo) {
+        $this->pdo = $pdo;
+    }
+
+    public function createTextPost($userId, $postText) {
+        $stmt = $this->pdo->prepare("INSERT INTO posts (user_id, post_text, post_type) VALUES (:user_id, :post_text, 'text')");
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->bindParam(':post_text', $postText);
+        $stmt->execute();
+    }
+
+    public function createVideoPost($userId, $postVideo) {
+        $stmt = $this->pdo->prepare("INSERT INTO posts (user_id, post_video, post_type) VALUES (:user_id, :post_video, 'video')");
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->bindParam(':post_video', $postVideo['name']);
+        $stmt->execute();
+
+        $uploadDir = './public/uploads/videos/';
+        $uploadFile = $uploadDir . basename($postVideo['name']);
+        move_uploaded_file($postVideo['tmp_name'], $uploadFile);
+    }
+
+    public function createImagePost($userId, $postImage) {
+        $uploadDir = './public/uploads/images/';
+        $uploadFile = $uploadDir . basename($postImage['name']);
+        move_uploaded_file($postImage['tmp_name'], $uploadFile);
+    
+        $stmt = $this->pdo->prepare("INSERT INTO posts (user_id, post_image, post_type) VALUES (:user_id, :post_image, 'image')");
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->bindParam(':post_image', $uploadFile);
+        $stmt->execute();
     }
 }
 ?>

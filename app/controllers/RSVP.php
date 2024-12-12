@@ -17,17 +17,14 @@ $eventId = $_GET['event_id'];
 </form>
 
 <?php
-// Handle RSVP submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Check if the user is logged in
     if (!isset($_SESSION['user'])) {
         echo "You need to be logged in to RSVP.";
         exit;
     }
 
-    $userId = $_SESSION['user']['id']; // Assuming the user ID is stored in session
+    $userId = $_SESSION['user']['id']; 
 
-    // Call the RSVP function
     $controller = new EventsController();
     $controller->rsvpToEvent($eventId, $userId);
 
