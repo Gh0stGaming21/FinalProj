@@ -70,7 +70,7 @@ class AuthController {
 
             if ($this->userModel->register($name, $email, $password)) {
                 $_SESSION['success'] = "Registration successful! You can now log in.";
-                header("Location: ?page=login");
+                header("Location: ?page=register");
                 exit;
             } else {
                 $_SESSION['error'] = "Registration failed. Please try again.";

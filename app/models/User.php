@@ -7,6 +7,16 @@ class User {
         $this->pdo = $pdo;
     }
 
+    // Method to check if an email already exists
+    public function emailExists($email)
+    {
+        $query = "SELECT id FROM users WHERE email = :email LIMIT 1";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        return $stmt->rowCount() > 0; // Returns true if email exists
+    }
+
     // Method to fetch the total number of users
     public function getTotalUsers()
     {
@@ -21,7 +31,7 @@ class User {
     }
 
     // Method to authenticate a user based on email and password
-    public function authenticateUser($email, $password) {
+    public function authenticateUser ($email, $password) {
         $query = "SELECT * FROM users WHERE email = :email";
         $stmt = $this->pdo->prepare($query);
         $stmt->bindParam(':email', $email);
@@ -40,12 +50,7 @@ class User {
     {
         try {
             // Check if email already exists
-            $query = "SELECT * FROM users WHERE email = :email";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->bindParam(':email', $email);
-            $stmt->execute();
-
-            if ($stmt->rowCount() > 0) {
+            if ($this->emailExists($email)) {
                 return false; // Email already in use
             }
 

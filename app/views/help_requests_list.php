@@ -1,73 +1,113 @@
-<?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+<?php 
+require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../controllers/HelpRequestController.php';
+
+session_start();
+
+if (!isset($_SESSION['user'])) { 
+    header('Location: login.php'); 
+    exit(); 
 }
 
-$controller = new HelpRequestController();
-$helpRequests = $controller->getHelpRequests();
+// Create an instance of HelpRequestController
+$helpRequestController = new HelpRequestController();
+
+// Handle form submission
+$helpRequestController->handleFormSubmission();
+
+// Fetch help requests
+$helpRequests = $helpRequestController->getHelpRequests();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" 
+          integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" 
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./public/assets/dashStyle.css">
     <title>Help Requests</title>
 </head>
 <body>
-    <h1>Help Requests</h1>
+<div class="container">
+    <nav>
+        <div class="nav-left">
+            <h1>Welcome, <?= htmlspecialchars($_SESSION['user']['name']); ?></h1>
+        </div>
 
-    <h2>Submit a Help Request</h2>
-    <form action="?page=help_requests" method="POST">
-        <?php if (isset($_SESSION['user'])): ?>
-            <p><strong>User:</strong> <?= htmlspecialchars($_SESSION['user']['name']) ?> (ID: <?= htmlspecialchars($_SESSION['user']['id']) ?>)</p>
-            <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['user']['id']) ?>">
-        <?php else: ?>
-            <p>You must be logged in to submit a help request.</p>
-            <a href="?page=login">Login</a>
-            <?php exit; ?>
-        <?php endif; ?>
+        <!-- Toggle Button for Mobile View -->
+        <button class="nav-toggle" onclick="toggleNav()">☰</button>
 
-        <label for="category">Category:</label>
-        <select name="category" id="category" required>
-            <option value="" disabled selected>Select a category</option>
-            <option value="Education">Education</option>
-            <option value="Health">Health</option>
-            <option value="Tech Support">Tech Support</option>
-            <option value="Other">Other</option>
-        </select>
-        <br>
+        <div class="nav-center">
+            <a href="?page=dashboard"><i class="fa-solid fa-house"></i></a>
+            <a href="?page=help_requests"><i class="fa-solid fa-tv"></i></a>
+            <a href="?page=resource_sharing"><i class="fa-solid fa-share"></i></a>
+            <a href="?page=events"><i class="fa-solid fa-calendar"></i></a>
+        </div>
 
-        <label for="description">Description:</label><br>
-        <textarea id="description" name="description" rows="4" cols="50" required></textarea>
-        <br>
+        <div class="nav-right">
+            <a href="?page=profile"><i class="fa-solid fa-user"></i></a>
+            <a href="?page=logout"><i class="fa-solid fa-right-from-bracket"></i></a>
+        </div>
+    </nav>
 
-        <input type="submit" value="Submit Request">
-    </form>
+    <div class="main-content">
+        <!-- Left Section: Recent Help Requests -->
+        <div class="main-left">
+            <h2>Recent Help Requests</h2>
+            <div class="posts">
+                <ul>
+                    <?php if (!empty($helpRequests)): ?>
+                        <?php foreach ($helpRequests as $request): ?>
+                            <li>
+                                <strong>User:</strong> <?= htmlspecialchars($request['user_name']) ?><br>
+                                <strong>Category:</strong> <?= htmlspecialchars($request['category']) ?><br>
+                                <strong>Description:</strong> <?= htmlspecialchars($request['description']) ?><br>
+                                <strong>Status:</strong> <?= htmlspecialchars($request['status']) ?><br>
+                                <strong>Submitted At:</strong> <?= htmlspecialchars($request['created_at']) ?><br>
+                                <hr>
+                            </li>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>No help requests found.</p>
+                    <?php endif; ?>
+                </ul>
+            </div>
+        </div>
 
-    <h2>Recent Help Requests</h2>
-    <?php if (!empty($helpRequests)): ?>
-        <table border="1">
-            <tr>
-                <th>User</th>
-                <th>Category</th>
-                <th>Description</th>
-                <th>Status</th>
-                <th>Submitted At</th>
-            </tr>
-            <?php foreach ($helpRequests as $request): ?>
-                <tr>
-                    <td><?= htmlspecialchars($request['user_name']) ?></td>
-                    <td><?= htmlspecialchars($request['category']) ?></td>
-                    <td><?= htmlspecialchars($request['description']) ?></td>
-                    <td><?= htmlspecialchars($request['status']) ?></td>
-                    <td><?= htmlspecialchars($request['created_at']) ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php else: ?>
-        <p>No help requests found.</p>
-    <?php endif; ?>
+        <!-- Right Section: Create Help Request -->
+        <div class="main-right">
+            <div class="create-post">
+                <h2>Submit a Help Request</h2>
+                <form action="?page=help_requests" method="POST">
+                    <label for="category">Category:</label>
+                    <select name="category" id="category" required>
+                        <option value="" disabled selected>Select a category</option>
+                        <option value="Education">Education</option>
+                        <option value="Health">Health</option>
+                        <option value="Tech Support">Tech Support</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <br>
 
-    <a href="?page=dashboard">Back to Dashboard</a>
+                    <label for="description">Description:</label><br>
+                    <textarea id="description" name="description" required></textarea>
+                    <br>
+
+                    <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['user']['id']) ?>">
+                    <button type="submit">Submit Request</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleNav() {
+    const navCenter = document.querySelector('.nav-center');
+    navCenter.classList.toggle('active');
+}
+</script>
 </body>
 </html>
