@@ -5,9 +5,9 @@
 }
 
 body {
-    background: #efefef;
-    color: #252525;
-    font-family: Arial, sans-serif;
+    background: #f4f4f4; /* Lighter background for better contrast */
+    color: #333; /* Darker text for better readability */
+    font-family: 'Arial', sans-serif;
 }
 
 nav {
@@ -16,12 +16,12 @@ nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #fff;
-    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+    background: #ffffff; /* White background for the navbar */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: fixed;
     z-index: 1000;
     top: 0;
-    padding: 0 16px;
+    padding: 0 20px; /* Increased padding for better spacing */
 }
 
 .nav-left {
@@ -31,9 +31,9 @@ nav {
 
 .nav-left .left {
     height: 40px;
-    background: #efefef;
+    background: #e0e0e0; /* Slightly darker background for the welcome area */
     border-radius: 20px;
-    padding: 0 8px;
+    padding: 0 12px;
     display: flex;
     align-items: center;
 }
@@ -44,37 +44,22 @@ nav {
 }
 
 .nav-center a {
-    margin-left: 12px;
+    margin-left: 20px; /* Increased margin for better spacing */
     text-decoration: none;
 }
 
 .nav-center i {
     background: none;
     border-radius: 10px;
-    font-size: 22px;
-    padding: 13px 20px;
+    font-size: 24px; /* Slightly larger icons */
+    padding: 15px 25px; /* Increased padding for better click area */
     color: #646262;
     transition: background 0.3s, color 0.3s;
 }
 
-.nav-center .fa-house {
-    color: #3636f8;
-    position: relative;
-}
-
-.nav-center .fa-house::after {
-    content: '';
-    background: #3636f8;
-    width: 100%;
-    height: 2px;
-    bottom: -6px;
-    left: 6px;
-    position: absolute;
-}
-
 .nav-center a:hover i {
-    background: #efefef;
-    color: #252525;
+    background: #e0e0e0; /* Light background on hover */
+    color: #252525; /* Darker text on hover */
 }
 
 .nav-right {
@@ -83,11 +68,11 @@ nav {
 }
 
 .nav-right a {
-    margin-left: 8px;
+    margin-left: 12px;
 }
 
 .nav-right i {
-    background: #efefef;
+    background: #e0e0e0; /* Light background for icons */
     height: 40px;
     width: 40px;
     border-radius: 50%;
@@ -95,119 +80,124 @@ nav {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background 0.3s;
 }
 
-.nav-right a:hover {
-    background: #b9b7b7;
-    border-radius: 50%;
+.nav-right a:hover i {
+    background: #b9b7b7; /* Darker background on hover */
 }
 
 .main-content {
     display: flex;
     justify-content: space-between;
-    margin-top: 60px; /* adjust the margin to match the height of the nav bar */
+    margin-top: 60px; /* Adjust the margin to match the height of the nav bar */
+    padding: 20px; /* Added padding for better spacing */
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
 }
 
 .main-left {
-    width: 60%;
-    margin: 10px;
-    padding-left: 20px; /* Added left padding for space */
+    width: 65%; /* Adjusted width for better layout */
+    margin-right: 20px; /* Added margin for spacing */
 }
 
 .main-right {
     width: 30%;
-    margin: 10px;
+    margin-left: 20px; /* Added margin for spacing */
     overflow-y: auto;
     height: calc(100vh - 60px);
 }
 
 .create-post {
     width: 100%;
-    background: #fff;
+    background: #ffffff; /* White background for the post area */
     padding: 20px;
-    border-radius: 7px;
-    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+    border-radius: 8px; /* Slightly larger border radius */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Added margin for spacing */
 }
 
 .create-post textarea {
     width: 100%;
-    height: 100px;
-    padding: 10px;
+    height: 120px; /* Increased height for better usability */
+    padding: 12px; /* Increased padding for better usability */
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 15px; /* Increased margin for better spacing */
+    font-size: 16px; /* Increased font size for better readability */
 }
 
 .create-post button {
-    background: #3636f8;
+    background: #007bff; /* Bootstrap primary color */
     color: #fff;
     border: none;
-    padding: 10px 15px;
+    padding: 12px 20px; /* Increased padding for better usability */
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s;
 }
 
 .create-post button:hover {
-    background: #2929c8;
+    background: #0056b3; /* Darker shade on hover */
 }
 
-.recent, .posts {
+.posts, .recent-activities {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     height: auto;
     cursor: pointer;
-    border-radius: 7px;
-    padding: 10px;
-    background: #fff;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0. 1);
+    border-radius: 8px; /* Increased border radius for a softer look */
+    padding: 15px; /* Increased padding for better spacing */
+    background: #ffffff; /* White background for posts */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Added margin for spacing */
 }
 
-.recent h2, .posts h2 {
-    margin-bottom: 10px;
-    font-size: 1.5em;
+.posts h2, .recent-activities h2 {
+    margin-bottom: 15px; /* Increased margin for better spacing */
+    font-size: 1.8em; /* Larger font size for headings */
+    color: #007bff; /* Bootstrap primary color for headings */
 }
 
-.recent ul, .posts ul {
+.posts ul, .recent-activities ul {
     list-style-type: none;
     width: 100%;
 }
 
-.recent li, .posts li {
-    padding: 10px 0;
+.posts li, .recent-activities li {
+    padding: 12px 0; /* Increased padding for better spacing */
     border-bottom: 1px solid #e0e0e0;
     transition: background 0.3s;
 }
 
-.recent li:hover, .posts li:hover {
-    background: #f9f9f9;
+.posts li:hover, .recent-activities li:hover {
+    background: #f9f9f9; /* Light background on hover */
 }
 
-.recent li:last-child, .posts li:last-child {
-    border-bottom: none;
+.posts li:last-child, .recent-activities li:last-child {
+    border-bottom: none; /* Remove border for the last item */
 }
 
 .pbottom {
-    width: 80%;
+    width: 100%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    margin: 5px auto;
+    margin: 10px auto; /* Increased margin for better spacing */
 }
 
 .pbottom .post-icon {
     display: flex;
     align-items: center;
     margin: 0 auto;
-    padding: 7px 20px;
+    padding: 10px 15px; /* Increased padding for better usability */
     cursor: pointer;
     transition: background 0.3s;
 }
 
 .pbottom .post-icon:hover {
-    background: #efefef;
-    border-radius: 8px;
+    background: #e0e0e0; /* Light background on hover */
+    border-radius: 8px; /* Rounded corners on hover */
 }
 
 .pbottom .post-icon input[type="file"] {
@@ -221,9 +211,52 @@ nav {
 }
 
 .pbottom .post-icon i {
-    margin-right: 5px;
+    margin-right: 8px; /* Increased margin for better spacing */
 }
 
 .pbottom .post-icon p {
     margin: 0;
+    font-size: 14px; /* Increased font size for better readability */
+}
+
+@media (max-width: 768px) {
+    .main-left, .main-right {
+        width: 100%; /* Full width on smaller screens */
+        margin: 0; /* Remove margins */
+    }
+
+    .nav-center a {
+        margin-left: 10px; /* Adjust margin for smaller screens */
+    }
+
+    .nav-center i {
+        font-size: 20px; /* Smaller icons */
+        padding: 10px; /* Adjust padding */
+    }
+
+    .create-post button {
+        padding: 10px 15px; /* Adjust button padding */
+    }
+
+    .posts h2, .recent-activities h2 {
+        font-size: 1.5em; /* Smaller heading size */
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-left .left h1 {
+        font-size: 1.2em; /* Smaller font size for welcome message */
+    }
+
+    .create-post textarea {
+        height: 100px; /* Adjust textarea height */
+    }
+
+    .pbottom {
+        grid-template-columns: repeat(2, 1fr); /* Two columns on very small screens */
+    }
+
+    .pbottom .post-icon {
+        padding: 8px 10px; /* Adjust padding for smaller screens */
+    }
 }
