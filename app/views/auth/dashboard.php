@@ -37,7 +37,7 @@ $recentActivities = $recentActivities->fetchAll();
         <nav>
             <div class="nav-left">
                 <div class='left'>
-                <h1>Welcome, <?= isset($_SESSION['user']) && is_array($_SESSION['user']) && isset($_SESSION['user']['name']) ? htmlspecialchars($_SESSION['user']['name']) : 'Guest' ?></h1>
+                    <h1>Welcome, <?= isset($_SESSION['user']) && is_array($_SESSION['user']) && isset($_SESSION['user']['name']) ? htmlspecialchars($_SESSION['user']['name']) : 'Guest' ?></h1>
                 </div>
             </div>
 
@@ -59,75 +59,84 @@ $recentActivities = $recentActivities->fetchAll();
                 <div class="create-post">
                     <form method="POST" action="?page=create_post" enctype="multipart/form-data">
                         <div class="ptop">
-                            <input type="text" name="post_text" placeholder=">
+                            <textarea name="post_text" placeholder="What's your request?" required></textarea>
                         </div>
-                        <hr>
                         <div class="pbottom">
                             <div class="post-icon">
-                                <input type="file" name="post_video" accept="video/*">
-                                <i class="fa-solid fa-video red"></i>
-                                <p>Live Video</p>
+                                <label>
+                                    <input type="file" name="post_video" accept="video/*">
+                                    <i class="fa-solid fa-video red"></i>
+                                    <p>Live Video</p>
+                                </label>
                             </div>
 
                             <div class="post-icon">
-                                <input type="file" name="post_image" accept="image/*">
-                                <i class="fa-solid fa-images green"></i>
-                                <p>Image Post</p>
+                                <label>
+                                    <input type="file" name="post_image" accept="image/*">
+                                    <i class="fa-solid fa-images green"></i>
+                                    <p>Image Post</p>
+                                </label>
                             </div>
 
                             <div class="post-icon">
-                                <input type="radio" name="post_type" value="text">
-                                <i class="fa-solid fa-face-grin yellow"></i>
-                                <p>Status Post</p>
+                                <label>
+                                    <input type="radio" name="post_type" value="text">
+                                    <i class="fa-solid fa-face-grin yellow"></i>
+                                    <p>Status Post</p>
+                                </label>
                             </div>
                         </div>
                         <button type="submit">Post</button>
                     </form>
                 </div>
+
+                <div class="posts">
+                    <h2>Posts</h2>
+                    <ul>
+                        <?php if (!empty($posts)): ?>
+                            <?php foreach ($posts as $post): ?>
+                                <li>
+                                    <h3><?= htmlspecialchars($post['post_text']) ?></h3>
+                                    <?php if ($post['post_image']): ?>
+                                        <?php if (file_exists($post['post_image'])): ?>
+                                            <img src="<?= htmlspecialchars($post['post_image']) ?>" alt="Post Image">
+                                        <?php else: ?>
+                                            <p>Error: Image file not found.</p>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                    <?php if ($post['post_video']): ?>
+                                        <video controls>
+                                            <source src="<?= htmlspecialchars($post['post_video']) ?>" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    <?php endif; ?>
+                                    <p>Posted on: <?= htmlspecialchars($post['created_at']) ?></p>
+                                </li>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>No posts available.</p>
+                        <?php endif; ?>
+                    </ul>
+                </div>
             </div>
 
             <div class="main-right">
-                <div class="recent">
+                <div class="recent-activities">
                     <h2>Recent Activities</h2>
                     <ul>
                         <?php if (!empty($recentActivities)): ?>
                             <?php foreach ($recentActivities as $activity): ?>
                                 <li>
-                                    <?= htmlspecialchars($activity['activity']) ?> - <?= htmlspecialchars($activity['created_at']) ?>
+                                    <p><?= htmlspecialchars($activity['activity_description']) ?> - <small><?= htmlspecialchars($activity['created_at']) ?></small></p>
                                 </li>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <li>No recent activities.</li>
+                            <p>No recent activities.</p>
                         <?php endif; ?>
                     </ul>
                 </div>
-
-                <div class="posts">
-    <h2>Posts</h2>
-    <ul>
-        <?php if (!empty($posts)): ?>
-            <?php foreach ($posts as $post): ?>
-                <li>
-                    <h3><?= htmlspecialchars($post['post_text']) ?></h3>
-                    <?php if ($post['post_image']): ?>
-                        <?php if (file_exists($post['post_image'])): ?>
-                            <img src="<?= htmlspecialchars($post['post_image']) ?>" alt="Post Image">
-                        <?php else: ?>
-                            <p>Error: Image file not found.</p>
-                        <?php endif; ?>
-                    <?php elseif ($post['post_video']): ?>
-                        <video src="<?= htmlspecialchars($post['post_video']) ?>" alt="Post Video"></video>
-                    <?php endif; ?>
-                </li>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <li>No posts.</li>
-        <?php endif; ?>
-    </ul>
-</div>
             </div>
         </div>
     </div>
-
 </body>
 </html>

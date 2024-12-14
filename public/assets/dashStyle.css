@@ -7,6 +7,7 @@
 body {
     background: #efefef;
     color: #252525;
+    font-family: Arial, sans-serif;
 }
 
 nav {
@@ -38,7 +39,7 @@ nav {
 }
 
 .nav-center {
- display: flex;
+    display: flex;
     align-items: center;
 }
 
@@ -122,30 +123,36 @@ nav {
 
 .create-post {
     width: 100%;
-    height: auto;
     background: #fff;
-    padding: 10px 15px;
+    padding: 20px;
     border-radius: 7px;
-    box-shadow: 0 1px 8px rgb(0, 0, 0,0.3);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
 }
 
-.create-post .ptop{
-    display: flex;
-    align-items: center;
-}
-
-.ptop textarea{
-    width: 90%;
+.create-post textarea {
+    width: 100%;
+    height: 100px;
     padding: 10px;
-    margin: 20px;
-    border: 0;
-    outline: none;
-    background: #f2f2f2;
-    border-radius: 30px;
-    font-size: 17px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
 }
 
-.recent {
+.create-post button {
+    background: #3636f8;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.create-post button:hover {
+    background: #2929c8;
+}
+
+.recent, .posts {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -155,31 +162,37 @@ nav {
     border-radius: 7px;
     padding: 10px;
     background: #fff;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0. 1);
 }
 
-.recent h2 {
+.recent h2, .posts h2 {
     margin-bottom: 10px;
+    font-size: 1.5em;
 }
 
-.recent ul {
+.recent ul, .posts ul {
     list-style-type: none;
     width: 100%;
 }
 
-.recent li {
-    padding: 5px 0;
+.recent li, .posts li {
+    padding: 10px 0;
     border-bottom: 1px solid #e0e0e0;
+    transition: background 0.3s;
 }
 
-.recent li:last-child {
+.recent li:hover, .posts li:hover {
+    background: #f9f9f9;
+}
+
+.recent li:last-child, .posts li:last-child {
     border-bottom: none;
 }
 
 .pbottom {
-    width: 100%;
+    width: 80%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     margin: 5px auto;
 }
 
@@ -187,11 +200,30 @@ nav {
     display: flex;
     align-items: center;
     margin: 0 auto;
-    padding: 7px 40px;
+    padding: 7px 20px;
     cursor: pointer;
+    transition: background 0.3s;
 }
 
 .pbottom .post-icon:hover {
     background: #efefef;
     border-radius: 8px;
+}
+
+.pbottom .post-icon input[type="file"] {
+    display: none; /* Hide the default file input */
+}
+
+.pbottom .post-icon label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.pbottom .post-icon i {
+    margin-right: 5px;
+}
+
+.pbottom .post-icon p {
+    margin: 0;
 }
