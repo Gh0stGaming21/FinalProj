@@ -38,10 +38,6 @@ nav {
     align-items: center;
 }
 
-.nav-left h1 {
-    font-size: 1.6em; /* Adjusted font size for the welcome message */
-}
-
 .nav-center {
     display: flex;
     align-items: center;
