@@ -1,19 +1,22 @@
 <?php 
-if (session_status() === PHP_SESSION_NONE) { 
-    session_start(); 
-}
+require_once __DIR__ . '/../../config/Database.php';
+require_once __DIR__ . '/../controllers/HelpRequestController.php';
+
+session_start();
+
 if (!isset($_SESSION['user'])) { 
     header('Location: login.php'); 
     exit(); 
 }
 
-$db = new Database(); 
-$pdo = $db->connect(); 
-$db->validateAdminAccess();
+// Create an instance of HelpRequestController
+$helpRequestController = new HelpRequestController();
 
-$helpRequests = $pdo->prepare("SELECT * FROM help_requests ORDER BY created_at DESC"); 
-$helpRequests->execute(); 
-$helpRequests = $helpRequests->fetchAll(); 
+// Handle form submission
+$helpRequestController->handleFormSubmission();
+
+// Fetch help requests
+$helpRequests = $helpRequestController->getHelpRequests();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +33,7 @@ $helpRequests = $helpRequests->fetchAll();
 <div class="container">
     <nav>
         <div class="nav-left">
-            <h1>Welcome, <?= isset($_SESSION['user']['name']) ? htmlspecialchars($_SESSION['user']['name']) : 'Guest'; ?></h1>
+            <h1>Welcome, <?= htmlspecialchars($_SESSION['user']['name']); ?></h1>
         </div>
 
         <!-- Toggle Button for Mobile View -->
@@ -57,21 +60,15 @@ $helpRequests = $helpRequests->fetchAll();
                 <ul>
                     <?php if (!empty($helpRequests)): ?>
                         <?php foreach ($helpRequests as $request): ?>
-                            <tr>
-                                <td><?= htmlspecialchars($request['user_name'] ?? 'Unknown User') ?></td>
-                                <br>
-                                <td><?= htmlspecialchars($request['category'] ?? 'N/A') ?></td>
-                                <br>
-                                <td><?= htmlspecialchars($request['description'] ?? 'No description provided.') ?></td>
-                                <br>
-                                <td><?= htmlspecialchars($request['status'] ?? 'N/A') ?></td>
-                                <br>
-                                <td><?= htmlspecialchars($request['created_at'] ?? 'N/A') ?></td>
+                            <li>
+                                <strong>User:</strong> <?= htmlspecialchars($request['user_name']) ?><br>
+                                <strong>Category:</strong> <?= htmlspecialchars($request['category']) ?><br>
+                                <strong>Description:</strong> <?= htmlspecialchars($request['description']) ?><br>
+                                <strong>Status:</strong> <?= htmlspecialchars($request['status']) ?><br>
+                                <strong>Submitted At:</strong> <?= htmlspecialchars($request['created_at']) ?><br>
                                 <hr>
-                                <br><br><br>
-                            </tr>
+                            </li>
                         <?php endforeach; ?>
-                        
                     <?php else: ?>
                         <p>No help requests found.</p>
                     <?php endif; ?>
@@ -98,7 +95,8 @@ $helpRequests = $helpRequests->fetchAll();
                     <textarea id="description" name="description" required></textarea>
                     <br>
 
-                    <button type="submit"> Submit Request</button>
+                    <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['user']['id']) ?>">
+                    <button type="submit">Submit Request</button>
                 </form>
             </div>
         </div>
