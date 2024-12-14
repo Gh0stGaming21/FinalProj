@@ -81,7 +81,7 @@ class AuthController {
     }
 
     public function forgotPassword() {
-        // To implement later
+       
     }
 
     public function logout() {

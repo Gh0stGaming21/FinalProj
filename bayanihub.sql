@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 12, 2024 at 05:43 AM
+-- Generation Time: Dec 14, 2024 at 04:11 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,17 +24,39 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `activities`
+--
+
+CREATE TABLE `activities` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `activity_type` varchar(255) NOT NULL,
+  `activity_text` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `events`
 --
 
 CREATE TABLE `events` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `location` text DEFAULT NULL,
   `event_date` date NOT NULL,
   `created_by` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `events`
+--
+
+INSERT INTO `events` (`id`, `name`, `location`, `event_date`, `created_by`, `created_at`) VALUES
+(2, 'Meeting', 'Baguio', '2024-12-20', 11, '2024-12-14 11:42:03');
 
 -- --------------------------------------------------------
 
@@ -71,7 +93,33 @@ CREATE TABLE `help_requests` (
 --
 
 INSERT INTO `help_requests` (`id`, `user`, `user_id`, `category`, `description`, `status`, `created_at`) VALUES
-(4, '', 11, 'Education', 'New Books', 'open', '2024-12-12 04:27:31');
+(4, '', 11, 'Education', 'New Books', 'open', '2024-12-12 04:27:31'),
+(5, '', 11, 'Health', 'aray', 'open', '2024-12-12 07:12:02');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `posts`
+--
+
+CREATE TABLE `posts` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `post_text` text DEFAULT NULL,
+  `post_image` varchar(255) DEFAULT NULL,
+  `post_video` varchar(255) DEFAULT NULL,
+  `post_type` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `posts`
+--
+
+INSERT INTO `posts` (`id`, `user_id`, `post_text`, `post_image`, `post_video`, `post_type`, `created_at`, `updated_at`) VALUES
+(1, 11, 'sasdsadsa', NULL, NULL, 'text', '2024-12-14 12:36:05', '2024-12-14 12:36:05'),
+(2, 11, '@help', NULL, NULL, 'text', '2024-12-14 12:45:15', '2024-12-14 12:45:15');
 
 -- --------------------------------------------------------
 
@@ -113,11 +161,20 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`, `reset_token`, `token_expiry`, `role`, `status`) VALUES
 (11, 'new', 'new@gmail.com', '$2y$10$y70ErE3hZ9ql2yzYpOdSwuSzJWoVtP/0wQiP0Smyzm5MVaovB3ks.', '2024-12-11 15:16:42', NULL, NULL, 'member', 'active'),
-(12, 'admin', 'admin@gmail.com', 'admin123', '2024-12-12 04:42:53', NULL, NULL, 'admin', 'active');
+(12, 'admin', 'admin@gmail.com', '$2y$10$y70ErE3hZ9ql2yzYpOdSwuSzJWoVtP/0wQiP0Smyzm5MVaovB3ks.', '2024-12-12 04:42:53', NULL, NULL, 'admin', 'active'),
+(13, 'Super User', 'super@gmail.com', '$2y$10$wVvLjRUboNdQMZf3L59qZ.ejf/8juzXlWk8z30SoWAhwEPHTShcr2', '2024-12-12 04:56:20', NULL, NULL, 'member', 'active'),
+(14, 'admin2', 'admin2@gmail.com', '12345', '2024-12-12 05:54:19', NULL, NULL, 'admin', 'active');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `activities`
+--
+ALTER TABLE `activities`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `events`
@@ -142,6 +199,13 @@ ALTER TABLE `help_requests`
   ADD KEY `fk_user_id` (`user_id`);
 
 --
+-- Indexes for table `posts`
+--
+ALTER TABLE `posts`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
 -- Indexes for table `resources`
 --
 ALTER TABLE `resources`
@@ -160,10 +224,16 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `activities`
+--
+ALTER TABLE `activities`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `event_rsvps`
@@ -175,7 +245,13 @@ ALTER TABLE `event_rsvps`
 -- AUTO_INCREMENT for table `help_requests`
 --
 ALTER TABLE `help_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `posts`
+--
+ALTER TABLE `posts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `resources`
@@ -187,11 +263,17 @@ ALTER TABLE `resources`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `activities`
+--
+ALTER TABLE `activities`
+  ADD CONSTRAINT `activities_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `events`
@@ -212,6 +294,12 @@ ALTER TABLE `event_rsvps`
 ALTER TABLE `help_requests`
   ADD CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `help_requests_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `posts`
+--
+ALTER TABLE `posts`
+  ADD CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
 --
 -- Constraints for table `resources`

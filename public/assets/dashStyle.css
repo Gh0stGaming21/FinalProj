@@ -5,8 +5,8 @@
 }
 
 body {
-    background: #f4f4f4; /* Lighter background for better contrast */
-    color: #333; /* Darker text for better readability */
+    background: #f4f4f4; 
+    color: #333; 
     font-family: 'Arial', sans-serif;
 }
 
@@ -16,12 +16,12 @@ nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #ffffff; /* White background for the navbar */
+    background: #ffffff; 
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: fixed;
     z-index: 1000;
     top: 0;
-    padding: 0 20px; /* Increased padding for better spacing */
+    padding: 0 20px; 
 }
 
 .nav-left {
@@ -31,11 +31,15 @@ nav {
 
 .nav-left .left {
     height: 40px;
-    background: #e0e0e0; /* Slightly darker background for the welcome area */
+    background: #e0e0e0; 
     border-radius: 20px;
     padding: 0 12px;
     display: flex;
     align-items: center;
+}
+
+.nav-left h1 {
+    font-size: 1.6em; /* Adjusted font size for the welcome message */
 }
 
 .nav-center {
@@ -44,22 +48,22 @@ nav {
 }
 
 .nav-center a {
-    margin-left: 20px; /* Increased margin for better spacing */
+    margin-left: 20px; 
     text-decoration: none;
 }
 
 .nav-center i {
     background: none;
     border-radius: 10px;
-    font-size: 24px; /* Slightly larger icons */
-    padding: 15px 25px; /* Increased padding for better click area */
+    font-size: 24px; 
+    padding: 15px 25px; 
     color: #646262;
     transition: background 0.3s, color 0.3s;
 }
 
 .nav-center a:hover i {
-    background: #e0e0e0; /* Light background on hover */
-    color: #252525; /* Darker text on hover */
+    background: #e0e0e0; 
+    color: #252525;
 }
 
 .nav-right {
@@ -147,35 +151,11 @@ nav {
 
 .create-post {
     width: 100%;
-    background: #ffffff; /* White background for the post area */
-    padding: 20px;
-    border-radius: 8px; /* Slightly larger border radius */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px; /* Added margin for spacing */
-}
-
-.create-post textarea {
-    width: 100%;
-    height: 120px; /* Increased height for better usability */
-    padding: 12px; /* Increased padding for better usability */
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 15px; /* Increased margin for better spacing */
-    font-size: 16px; /* Increased font size for better readability */
-}
-
-.create-post button {
-    background: #007bff; /* Bootstrap primary color */
-    color: #fff;
-    border: none;
-    padding: 12px 20px; /* Increased padding for better usability */
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.create-post button:hover {
-    background: #0056b3; /* Darker shade on hover */
+    height: auto;
+    background: #fff;
+    padding: 10px 15px;
+    border-radius: 7px;
+    box-shadow: 0 1px 8px rgb(0, 0, 0,0.3);
 }
 
 .posts, .recent-activities {
@@ -185,17 +165,14 @@ nav {
     align-items: flex-start;
     height: auto;
     cursor: pointer;
-    border-radius: 8px; /* Increased border radius for a softer look */
-    padding: 15px; /* Increased padding for better spacing */
-    background: #ffffff; /* White background for posts */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px; /* Added margin for spacing */
+    border-radius: 7px;
+    padding: 10px;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
-.posts h2, .recent-activities h2 {
-    margin-bottom: 15px; /* Increased margin for better spacing */
-    font-size: 1.8em; /* Larger font size for headings */
-    color: #007bff; /* Bootstrap primary color for headings */
+.recent h2 {
+    margin-bottom: 10px;
 }
 
 .posts ul, .recent-activities ul {
@@ -203,43 +180,38 @@ nav {
     width: 100%;
 }
 
-.posts li, .recent-activities li {
-    padding: 12px 0; /* Increased padding for better spacing */
+.recent li {
+    padding: 5px 0;
     border-bottom: 1px solid #e0e0e0;
-    transition: background 0.3s;
 }
 
-.posts li:hover, .recent-activities li:hover {
-    background: #f9f9f9; /* Light background on hover */
-}
-
-.posts li:last-child, .recent-activities li:last-child {
-    border-bottom: none; /* Remove border for the last item */
+.recent li:last-child {
+    border-bottom: none;
 }
 
 .pbottom {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    margin: 10px auto; /* Increased margin for better spacing */
+    grid-template-columns: 1fr 1fr 1fr;
+    margin: 5px auto;
 }
 
 .pbottom .post-icon {
     display: flex;
     align-items: center;
     margin: 0 auto;
-    padding: 10px 15px; /* Increased padding for better usability */
+    padding: 7px 40px;
     cursor: pointer;
     transition: background 0.3s;
 }
 
 .pbottom .post-icon:hover {
-    background: #e0e0e0; /* Light background on hover */
-    border-radius: 8px; /* Rounded corners on hover */
+    background: #efefef;
+    border-radius: 8px;
 }
 
 .pbottom .post-icon input[type="file"] {
-    display: none; /* Hide the default file input */
+    display: none; 
 }
 
 .pbottom .post-icon label {
@@ -249,52 +221,51 @@ nav {
 }
 
 .pbottom .post-icon i {
-    margin-right: 8px; /* Increased margin for better spacing */
+    margin-right: 8px; 
 }
 
 .pbottom .post-icon p {
     margin: 0;
-    font-size: 14px; /* Increased font size for better readability */
+    font-size: 14px; 
 }
 
-/* Media Queries for Responsiveness */
 @media (max-width: 768px) {
     .main-content {
-        flex-direction: column; /* Stack the main content vertically */
+        flex-direction: column; 
     }
 
     .main-left, .main-right {
-        width: 100%; /* Full width for both sections */
-        margin: 0; /* Remove margins */
+        width: 100%; 
+        margin: 0; 
     }
 
     .nav-center a {
-        margin-left: 10px; /* Adjust margin for smaller screens */
+        margin-left: 10px; 
     }
 
     .nav-right a {
-        margin-left: 8px; /* Adjust margin for smaller screens */
+        margin-left: 8px; 
     }
 
     .pbottom {
-        grid-template-columns: repeat(2, 1fr); /* Two columns on smaller screens */
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
 @media (max-width: 480px) {
     .nav-center a {
-        font-size: 14px; /* Smaller font size for icons */
+        font-size: 14px;
     }
 
     .create-post textarea {
-        height: 100px; /* Decrease height for smaller screens */
+        height: 100px; 
     }
 
     .create-post button {
-        padding: 10px 15px; /* Adjust button padding */
+        padding: 10px 15px;
     }
 
     .posts h2, .recent-activities h2 {
-        font-size: 1.5em; /* Smaller heading size */
+        font-size: 1.5em; 
     }
 }

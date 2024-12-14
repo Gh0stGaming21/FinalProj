@@ -7,7 +7,12 @@ define('BASE_PATH', __DIR__);
 require_once './config/database.php';
 require_once './app/controllers/AuthController.php';
 require_once './app/controllers/DashboardController.php';
-require_once './app/core/Router.php'; 
+require_once './app/core/Router.php';
+
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit();
+}
 
 $router = new Router();
 $router->route();
