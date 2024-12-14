@@ -1,3 +1,24 @@
+<?php
+session_start();
+
+// Only allow admin users to access this page
+if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+    header('Location: /index.php');
+    exit;
+}
+
+require_once 'config/Database.php';
+require_once 'models/EventModel.php';
+
+$db = new Database();
+$eventModel = new EventModel($db->connect());
+
+// Fetch pending help requests
+$pendingRequests = $eventModel->getPendingRequests(); // Replace with your method for fetching help requests
+
+// Fetch RSVP participation data
+$rsvps = $eventModel->getAllRSVPs();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +29,7 @@
 </head>
 <body>
     <h1>Admin Dashboard</h1>
+
     <h2>Pending Help Requests</h2>
     <table>
         <thead>
@@ -42,6 +64,30 @@
             <?php else: ?>
                 <tr>
                     <td colspan="5">No pending requests found.</td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+
+    <h2>RSVP Participation</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Event Title</th>
+                <th>User Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if (!empty($rsvps)): ?>
+                <?php foreach ($rsvps as $rsvp): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($rsvp['event_title']); ?></td>
+                        <td><?= htmlspecialchars($rsvp['user_name']); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="2">No RSVP participation data found.</td>
                 </tr>
             <?php endif; ?>
         </tbody>

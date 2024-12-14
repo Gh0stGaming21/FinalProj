@@ -2,6 +2,8 @@
 require_once __DIR__ . '/../controllers/HelpRequestController.php';
 require_once __DIR__ . '/../controllers/ResourceSharingController.php';  
 require_once __DIR__ . '/../controllers/EventsController.php';  
+require_once __DIR__ . '/../controllers/PostController.php';
+
 
 class Router {
     private $viewsBase;
@@ -14,7 +16,6 @@ class Router {
     }
 
     public function route() {
-        
         $page = strtolower($_GET['page'] ?? 'login');
     
         $routeHandlers = [
@@ -27,6 +28,7 @@ class Router {
             'profile' => 'handleProfileView',
             'logout' => 'handleLogout',
             'events' => 'handleEvents',
+            'create_event' => 'handleCreateEvent',
             'resource_sharing' => 'handleResourceSharing',
             'create_post' => 'handleCreatePost',
         ];
@@ -67,6 +69,11 @@ class Router {
         $controller = new AuthController();
         $controller->logout();
     }
+
+    public function handleProfileView() {
+        require_once './app/views/profile.php';
+    }
+
 
     private function handleHelpRequests() {
         if (!class_exists('HelpRequestController')) {
@@ -109,30 +116,41 @@ class Router {
             header("Location: ?page=login");
             exit;
         }
-    
+
         $user = $_SESSION['user'];
-    
+        
         $database = new Database();
         $pdo = $database->connect();
-    
         $controller = new PostController($pdo);
+
         $postType = $_POST['post_type'] ?? null;
         $postText = $_POST['post_text'] ?? null;
         $postVideo = $_FILES['post_video'] ?? null;
         $postImage = $_FILES['post_image'] ?? null;
-    
-        if ($postType === 'text') {
-            $controller->createTextPost($user['id'], $postText);
-        } elseif ($postVideo) {
-            $controller->createVideoPost($user['id'], $postVideo);
-        } elseif ($postImage) {
-            $controller->createImagePost($user['id'], $postImage);
-        }
-    
-        header("Location: ?page=dashboard");
-        exit;
-    }
 
+        echo '<pre>';
+    print_r($_POST);
+    print_r($_FILES);
+    echo '</pre>';
+    exit;
+
+        try {
+            if ($postType === 'text' && !empty($postText)) {
+                $controller->createTextPost($user['id'], $postText);
+            } elseif ($postType === 'video' && $postVideo) {
+                $controller->createVideoPost($user['id'], $postVideo);
+            } elseif ($postType === ' image' && $postImage) {
+                $controller->createImagePost($user['id'], $postImage);
+            } else {
+                throw new Exception("Invalid post data.");
+            }
+
+            header("Location: ?page=dashboard");
+            exit;
+        } catch (Exception $e) {
+            echo "Error: " . $e->getMessage();
+        }
+    }
 
     private function handleRegister() {
         $controller = new AuthController();
@@ -162,23 +180,71 @@ class Router {
         echo "<h1>404 - Page Not Found</h1>";
     }
 
-    private function handleEvents() {
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['location']) && !isset($_GET['date'])) {
-            $this->loadView('events.php');
-        } else {
-            $filters = [];
+    private function handleEvents($action = 'list') {
+        $database = new Database();
+        $pdo = $database->connect();
     
-            if (isset($_GET['location']) && !empty($_GET['location'])) {
-                $filters['location'] = $_GET['location'];
-            }
-            if (isset($_GET['date']) && !empty($_GET['date'])) {
-                $filters['date'] = $_GET['date'];
-            }
+        $eventsController = new EventsController($pdo);
     
-            $controller = new EventsController();
-            $events = $controller->getEvents($filters);
-            $this->loadView('events.php', ['events' => $events, 'filters' => $filters]);
+        if ($action === 'create') {
+            $eventsController->create(); 
         }
+    
+        switch ($action) {
+            case 'list':
+                $filters = [
+                    'location' => $_GET['location'] ?? null,
+                    'date' => $_GET['date'] ?? null,
+                ];
+                $events = $eventsController->getEvents($filters); 
+                $this->loadView('events_list.php', ['events' => $events]);
+                break;
+    
+            case 'rsvp':
+                $eventId = $_POST['id'] ?? null;
+                $userId = $_POST['user_id'] ?? null;
+    
+                if ($eventId && $userId) {
+                    $eventsController->rsvpToEvent($eventId, $userId);
+                } else {
+                    echo "Missing event_id or user_id.";
+                }
+                break;
+    
+            default:
+                $this->show404();
+                break;
+        }
+    }
+    
+    public function create() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $event_name = isset($_POST['event_name']) ? htmlspecialchars($_POST['event_name']) : '';
+            $location = isset($_POST['location']) ? htmlspecialchars($_POST['location']) : '';
+            $event_date = isset($_POST['event_date']) ? $_POST['event_date'] : '';
+
+            if (empty($event_name) || empty($location) || empty($event_date)) {
+                $_SESSION['error'] = 'All fields are required.';
+                header('Location: ?page=events&action=create');
+                exit();
+            }
+
+            $query = "INSERT INTO events (event_name, location, event_date) VALUES (:event_name, :location, :event_date)";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->bindParam(':event_name', $event_name);
+            $stmt->bindParam(':location', $location);
+            $stmt->bindParam(':event_date', $event_date);
+
+            if ($stmt->execute()) {
+                $_SESSION['success'] = 'Event created successfully!';
+            } else {
+                $_SESSION['error'] = 'Failed to create event. Please try again.';
+            }
+            header('Location: ?page=events');
+            exit();
+        }
+
+        $this->loadView('create_event.php');
     }
 
     private function handleResourceSharing() {
@@ -194,23 +260,6 @@ class Router {
         $controller = new ResourceSharingController();
         $resources = $controller->getResources($filters);
         $this->loadView('resource_sharing.php', ['resources' => $resources]);
-    }
-
-    private function handleProfileView() {
-        if (!isset($_SESSION['user'])) {
-            echo "No user session found. Redirecting to login.";
-            header("Location: ?page=login");
-            exit;
-        }
-
-        $user = $_SESSION['user']; 
-
-        $database = new Database();
-        $pdo = $database->connect();
-
-        $controller = new ProfileController($pdo);
-        $profile = $controller->getProfile($user['id']);
-        $this->loadView('profile.php', ['profile' => $profile]);
     }
 
     private function handleAdminDashboard() {
@@ -237,40 +286,5 @@ class Router {
     }
 }
 
-class PostController {
-    private $pdo;
 
-    public function __construct($pdo) {
-        $this->pdo = $pdo;
-    }
-
-    public function createTextPost($userId, $postText) {
-        $stmt = $this->pdo->prepare("INSERT INTO posts (user_id, post_text, post_type) VALUES (:user_id, :post_text, 'text')");
-        $stmt->bindParam(':user_id', $userId);
-        $stmt->bindParam(':post_text', $postText);
-        $stmt->execute();
-    }
-
-    public function createVideoPost($userId, $postVideo) {
-        $stmt = $this->pdo->prepare("INSERT INTO posts (user_id, post_video, post_type) VALUES (:user_id, :post_video, 'video')");
-        $stmt->bindParam(':user_id', $userId);
-        $stmt->bindParam(':post_video', $postVideo['name']);
-        $stmt->execute();
-
-        $uploadDir = './public/uploads/videos/';
-        $uploadFile = $uploadDir . basename($postVideo['name']);
-        move_uploaded_file($postVideo['tmp_name'], $uploadFile);
-    }
-
-    public function createImagePost($userId, $postImage) {
-        $uploadDir = './public/uploads/images/';
-        $uploadFile = $uploadDir . basename($postImage['name']);
-        move_uploaded_file($postImage['tmp_name'], $uploadFile);
-    
-        $stmt = $this->pdo->prepare("INSERT INTO posts (user_id, post_image, post_type) VALUES (:user_id, :post_image, 'image')");
-        $stmt->bindParam(':user_id', $userId);
-        $stmt->bindParam(':post_image', $uploadFile);
-        $stmt->execute();
-    }
-}
 ?>

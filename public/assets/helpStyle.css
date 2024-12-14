@@ -1,0 +1,198 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #f4f4f4; /* Lighter background for better contrast */
+    color: #333; /* Darker text for better readability */
+    font-family: 'Arial', sans-serif;
+}
+
+nav {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff; /* White background for the navbar */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    padding: 0 20px; /* Increased padding for better spacing */
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.nav-left h1 {
+    font-size: 1.5em; /* Adjusted font size for the welcome message */
+}
+
+.nav-center {
+    display: flex;
+    align-items: center;
+}
+
+.nav-center a {
+    margin-left: 20px; /* Increased margin for better spacing */
+    text-decoration: none;
+}
+
+.nav-center i {
+    font-size: 24px; /* Slightly larger icons */
+    color: #646262;
+    transition: color 0.3s;
+}
+
+.nav-center a:hover i {
+    color: #007bff; /* Change color on hover */
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
+.nav-right a {
+    margin-left: 12px;
+}
+
+.nav-toggle {
+    display: none; /* Hide toggle button by default */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .nav-center {
+        display: none; /* Hide by default */
+        flex-direction: column; /* Stack vertically */
+        position: absolute; /* Position it absolutely */
+        top: 60px; /* Below the navbar */
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 999; /* Ensure it appears above other content */
+    }
+
+    .nav-center.active {
+        display: flex; /* Show when active */
+    }
+
+    .nav-toggle {
+        display: block; /* Show toggle button */
+    }
+}
+
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 60px; /* Adjust the margin to match the height of the nav bar */
+    padding: 20px; /* Added padding for better spacing */
+}
+
+.main-left {
+    width: 65%; /* Adjusted width for better layout */
+    margin-right: 20px; /* Added margin for spacing */
+}
+
+.main-right {
+    width: 30%;
+    margin-left: 20px; /* Added margin for spacing */
+}
+
+.create-post {
+    width: 100%;
+    background: #ffffff; /* White background for the post area */
+    padding: 20px;
+    border-radius: 8px; /* Slightly larger border radius */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Added margin for spacing */
+}
+
+.create-post h2 {
+    margin-bottom: 15px; /* Margin for heading */
+}
+
+.create-post label {
+    display: block;
+    margin-bottom: 5px; /* Space between label and input */
+}
+
+.create-post textarea {
+    width: 100%;
+    height: 120px; /* Increased height for better usability */
+    padding: 12px; /* Increased padding for better usability */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px; /* Increased margin for better spacing */
+    font-size: 16px; /* Increased font size for better readability */
+}
+
+.create-post button {
+    background: #007bff; /* Bootstrap primary color */
+    color: #fff;
+    border: none;
+    padding: 12px 20px; /* Increased padding for better usability */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.create-post button:hover {
+    background: #0056b3; /* Darker shade on hover */
+}
+
+.posts {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background: #ffffff; /* White background for posts */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Added margin for spacing */
+    border-radius: 8px; /* Increased border radius for a softer look */
+    padding: 15px; /* Increased padding for better spacing */
+}
+
+.posts h2 {
+    margin-bottom: 15px; /* Increased margin for better spacing */
+    font-size: 1.8em; /* Larger font size for headings */
+    color: #007bff; /* Bootstrap primary color for headings */
+}
+
+.posts ul {
+    list-style-type: none;
+    width: 100%;
+}
+
+.posts li {
+    padding: 12px 0; /* Increased padding for better spacing */
+    border-bottom: 1px solid #e0e0e0;
+    transition: background 0.3s;
+}
+
+.posts li:hover {
+    background: #f9f9f9; /* Light background on hover */
+}
+
+.posts li:last-child {
+    border-bottom: none; /* Remove border for the last item */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .main-content {
+        flex-direction: column; /* Stack the main content vertically */
+    }
+
+    .main-left, .main-right {
+        width: 100%; /* Full width for both sections */
+        margin: 0; /* Remove margins */
+    }
+}

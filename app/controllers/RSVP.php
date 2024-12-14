@@ -1,33 +1,46 @@
 <?php
 require_once __DIR__ . '/../../config/Database.php';
-require_once 'path/to/EventsController.php';
 
-if (!isset($_GET['event_id'])) {
-    echo "Event ID is required.";
-    exit;
-}
+class EventsController {
+    private $pdo;
 
-$eventId = $_GET['event_id'];
-?>
-
-<h1>RSVP to Event</h1>
-<p>Are you sure you want to RSVP for this event?</p>
-<form method="POST">
-    <button type="submit">Confirm RSVP</button>
-</form>
-
-<?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_SESSION['user'])) {
-        echo "You need to be logged in to RSVP.";
-        exit;
+    public function __construct() {
+        $database = new Database();
+        $this->pdo = $database->connect();
     }
 
-    $userId = $_SESSION['user']['id']; 
+    public function getEvents($filters = []) {
+        $query = "SELECT * FROM events WHERE 1";
 
-    $controller = new EventsController();
-    $controller->rsvpToEvent($eventId, $userId);
+        if (isset($filters['location'])) {
+            $query .= " AND location = :location";
+        }
 
-    echo "You have successfully RSVP'd for the event!";
+        if (isset($filters['date'])) {
+            $query .= " AND event_date >= :date";
+        }
+
+        $stmt = $this->pdo->prepare($query);
+        
+        if (isset($filters['location'])) {
+            $stmt->bindParam(':location', $filters['location']);
+        }
+        if (isset($filters['date'])) {
+            $stmt->bindParam(':date', $filters['date']);
+        }
+
+        $stmt->execute();
+        $events = $stmt->fetchAll(PDO::FETCH_ASSOC); 
+       
+        include __DIR__ . '/../views/events.php';  
+    }
+
+    public function rsvpToEvent($eventId, $userId) {
+        $query = "INSERT INTO event_rsvps (event_id, user_id) VALUES (:event_id, :user_id)";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':event_id', $eventId);
+        $stmt->bindParam(':user_id', $userId);
+        $stmt->execute();
+    }
 }
 ?>
