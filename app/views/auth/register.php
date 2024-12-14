@@ -2,33 +2,6 @@
 <link rel="stylesheet" href="./public/assets/style.css">
 
 <div class="container" id="container">
-    <!-- Sign In Form -->
-    <div class="form-container sign-in-container">
-        <form action="?page=login" method="POST">
-            <h1>Sign in</h1>
-            <div class="social-container">
-                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
-                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
-            </div>
-            <span>or use your account</span>
-            <div class="infield">
-                <input type="text" placeholder="Email" name="email" />
-                <label></label>
-            </div>
-            <div class="infield">
-                <input type="password" placeholder="Password" name="password" />
-                <label></label>
-            </div>
-            <?php if (isset($_SESSION['error'])): ?>
-                <p class="error"><?php echo htmlspecialchars($_SESSION['error']); ?></p>
-                <?php unset($_SESSION['error']); // Clear the error after displaying it ?>
-            <?php endif; ?>
-            <button type="submit" name="login">Sign In</button>
-            <a href="?page=forgotpassword" class="forgot">Forgot Password?</a>
-        </form>
-    </div>
-
     <!-- Sign Up Form -->
     <div class="form-container sign-up-container">
         <form action="?page=register" method="POST">
@@ -52,10 +25,41 @@
                 <label></label>
             </div>
             <?php if (isset($_SESSION['error'])): ?>
-                    <p class="error"><?php echo htmlspecialchars($_SESSION['error']); ?></p>
-                    <?php unset($_SESSION['error']); // Clear the error after displaying it ?>
-                <?php endif; ?>
+                <p class="error"><?php echo htmlspecialchars($_SESSION['error']); ?></p>
+                <?php unset($_SESSION['error']); // Clear the error after displaying it ?>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['success'])): ?>
+                <p class="error"><?php echo htmlspecialchars($_SESSION['success']); ?></p>
+                <?php unset($_SESSION['success']); ?>
+            <?php endif; ?>
             <button type="submit" name="register">Sign Up</button>
+        </form>
+    </div>
+
+    <!-- Sign In Form -->
+    <div class="form-container sign-in-container">
+        <form action="?page=login" method="POST">
+            <h1>Sign In</h1>
+            <div class="social-container">
+                <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+                <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+            <span>or use your account</span>
+            <div class="infield">
+                <input type="text" placeholder="Email" name="email" />
+                <label></label>
+            </div>
+            <div class="infield">
+                <input type="password" placeholder="Password" name="password" />
+                <label></label>
+            </div>
+            <?php if (isset($_SESSION['error'])): ?>
+                <p class="error"><?php echo htmlspecialchars($_SESSION['error']); ?></p>
+                <?php unset($_SESSION['error']); // Clear the error after displaying it ?>
+            <?php endif; ?>
+            <button type="submit" name="login">Sign In</button>
+            <a href="?page=forgotpassword" class="forgot">Forgot Password?</a>
         </form>
     </div>
 
@@ -77,8 +81,19 @@
 </div>
 
 <script>
-    const container = document.getElementById('container');
+    const container = document.getElementById ('container');
     const overlayBtn = document.getElementById('overlayBtn');
+
+    // Ensure the Sign Up form is shown first
+    container.classList.add('right-panel-active');
+
+    document.getElementById('signIn').addEventListener('click', () => {
+        container.classList.remove('right-panel-active');
+    });
+
+    document.getElementById('signUp').addEventListener('click', () => {
+        container.classList.add('right-panel-active');
+    });
 
     overlayBtn.addEventListener('click', () => {
         container.classList.toggle('right-panel-active');

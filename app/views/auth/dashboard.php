@@ -59,13 +59,13 @@ $recentActivities = $recentActivities->fetchAll();
                 <div class="create-post">
                     <form method="POST" action="?page=create_post" enctype="multipart/form-data">
                         <div class="ptop">
-                            <textarea name="post_text" placeholder="What's your request?"></textarea>
+                            <input type="text" name="post_text" placeholder=">
                         </div>
+                        <hr>
                         <div class="pbottom">
                             <div class="post-icon">
                                 <input type="file" name="post_video" accept="video/*">
-                                <i class="fa-solid fa-video ```php
-                                red"></i>
+                                <i class="fa-solid fa-video red"></i>
                                 <p>Live Video</p>
                             </div>
 

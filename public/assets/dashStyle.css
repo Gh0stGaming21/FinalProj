@@ -129,6 +129,22 @@ nav {
     box-shadow: 0 1px 8px rgb(0, 0, 0,0.3);
 }
 
+.create-post .ptop{
+    display: flex;
+    align-items: center;
+}
+
+.ptop textarea{
+    width: 90%;
+    padding: 10px;
+    margin: 20px;
+    border: 0;
+    outline: none;
+    background: #f2f2f2;
+    border-radius: 30px;
+    font-size: 17px;
+}
+
 .recent {
     width: 100%;
     display: flex;
