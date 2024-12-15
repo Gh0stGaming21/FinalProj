@@ -48,10 +48,9 @@ $events = []; // Replace with actual fetching logic
                     <?php foreach ($events as $event): ?>
                         <li class="event-item">
                             <strong>
-                                <?php echo isset($event['name']) ? htmlspecialchars($event['name']) : 'No Event name'; ?>
+                                <?= isset($event['name']) ? htmlspecialchars($event['name']) : 'No Event name'; ?>
                             </strong><br>
-                            Location: <?php echo isset($event['location']) ? htmlspecialchars($event['location']) : 'No Location'; ?><br>
-                            
+                            Location: <?= isset($event['location']) ? htmlspecialchars($event['location']) : 'No Location'; ?><br>
                             <?php 
                                 if (isset($event['event_date'])) {
                                     $date = new DateTime($event['event_date']);
@@ -60,10 +59,9 @@ $events = []; // Replace with actual fetching logic
                                     echo 'No Date';
                                 }
                             ?><br>
-                            
                             <form action="?page=events&action=rsvp" method="post">
-                                <input type="hidden" name="event_id" value="<?php echo htmlspecialchars($event['id']); ?>">
-                                <input type="hidden" name="user_id" value="<?php echo htmlspecialchars($_SESSION['user']['id']); ?>">
+                                <input type="hidden" name="event_id" value="<?= htmlspecialchars($event['id']); ?>">
+                                <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['user']['id']); ?>">
                                 <button type="submit" class="rsvp-button">RSVP</button>
                             </form>
                         </li>

@@ -1,16 +1,3 @@
-<?php 
-if (session_status() === PHP_SESSION_NONE) { 
-    session_start(); 
-}
-if (!isset($_SESSION['user'])) { 
-    header('Location: login.php'); 
-    exit(); 
-}
-
-// Assuming you have a database connection and fetching pending requests
-// $pendingRequests = fetchPendingRequests(); // Replace with your actual fetching logic
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,6 +77,14 @@ if (!isset($_SESSION['user'])) {
                 </table>
             </div>
         </div>
+    </div>
 </div>
+
+<script>
+function toggleNav() {
+    const navCenter = document.querySelector('.nav-center');
+    navCenter.classList.toggle('active'); // Toggle the 'active' class to show/hide the nav
+}
+</script>
 </body>
 </html>

@@ -35,7 +35,7 @@ nav {
 
 .nav-left .left {
     height: 40px;
-    background: #e0e0e0; /* Slightly darker background for the welcome area */
+    background: #ffffff; /* Slightly darker background for the welcome area */
     border-radius: 20px;
     padding: 0 12px;
     display: flex;
