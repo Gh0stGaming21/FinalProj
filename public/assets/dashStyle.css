@@ -5,8 +5,8 @@
 }
 
 body {
-    background: #f4f4f4; 
-    color: #333; 
+    background: #f4f4f4; /* Lighter background for better contrast */
+    color: #333; /* Darker text for better readability */
     font-family: 'Arial', sans-serif;
 }
 
@@ -16,12 +16,12 @@ nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #ffffff; 
+    background: #ffffff; /* White background for the navbar */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: fixed;
     z-index: 1000;
     top: 0;
-    padding: 0 20px; 
+    padding: 0 20px; /* Increased padding for better spacing */
 }
 
 .nav-left {
@@ -31,15 +31,11 @@ nav {
 
 .nav-left .left {
     height: 40px;
-    background: #e0e0e0; 
+    background: #e0e0e0; /* Slightly darker background for the welcome area */
     border-radius: 20px;
     padding: 0 12px;
     display: flex;
     align-items: center;
-}
-
-.nav-left h1 {
-    font-size: 1.6em; /* Adjusted font size for the welcome message */
 }
 
 .nav-center {
@@ -48,22 +44,22 @@ nav {
 }
 
 .nav-center a {
-    margin-left: 20px; 
+    margin-left: 20px; /* Increased margin for better spacing */
     text-decoration: none;
 }
 
 .nav-center i {
     background: none;
     border-radius: 10px;
-    font-size: 24px; 
-    padding: 15px 25px; 
+    font-size: 24px; /* Slightly larger icons */
+    padding: 15px 25px; /* Increased padding for better click area */
     color: #646262;
     transition: background 0.3s, color 0.3s;
 }
 
 .nav-center a:hover i {
-    background: #e0e0e0; 
-    color: #252525;
+    background: #e0e0e0; /* Light background on hover */
+    color: #252525; /* Darker text on hover */
 }
 
 .nav-right {
@@ -151,11 +147,35 @@ nav {
 
 .create-post {
     width: 100%;
-    height: auto;
-    background: #fff;
-    padding: 10px 15px;
-    border-radius: 7px;
-    box-shadow: 0 1px 8px rgb(0, 0, 0,0.3);
+    background: #ffffff; /* White background for the post area */
+    padding: 20px;
+    border-radius: 8px; /* Slightly larger border radius */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Added margin for spacing */
+}
+
+.create-post textarea {
+    width: 100%;
+    height: 120px; /* Increased height for better usability */
+    padding: 12px; /* Increased padding for better usability */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px; /* Increased margin for better spacing */
+    font-size: 16px; /* Increased font size for better readability */
+}
+
+.create-post button {
+    background: #007bff; /* Bootstrap primary color */
+    color: #fff;
+    border: none;
+    padding: 12px 20px; /* Increased padding for better usability */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.create-post button:hover {
+    background: #0056b3; /* Darker shade on hover */
 }
 
 .posts, .recent-activities {
@@ -165,14 +185,17 @@ nav {
     align-items: flex-start;
     height: auto;
     cursor: pointer;
-    border-radius: 7px;
-    padding: 10px;
-    background: #fff;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; /* Increased border radius for a softer look */
+    padding: 15px; /* Increased padding for better spacing */
+    background: #ffffff; /* White background for posts */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Added margin for spacing */
 }
 
-.recent h2 {
-    margin-bottom: 10px;
+.posts h2, .recent-activities h2 {
+    margin-bottom: 15px; /* Increased margin for better spacing */
+    font-size: 1.8em; /* Larger font size for headings */
+    color: #007bff; /* Bootstrap primary color for headings */
 }
 
 .posts ul, .recent-activities ul {
@@ -180,38 +203,43 @@ nav {
     width: 100%;
 }
 
-.recent li {
-    padding: 5px 0;
+.posts li, .recent-activities li {
+    padding: 12px 0; /* Increased padding for better spacing */
     border-bottom: 1px solid #e0e0e0;
+    transition: background 0.3s;
 }
 
-.recent li:last-child {
-    border-bottom: none;
+.posts li:hover, .recent-activities li:hover {
+    background: #f9f9f9; /* Light background on hover */
+}
+
+.posts li:last-child, .recent-activities li:last-child {
+    border-bottom: none; /* Remove border for the last item */
 }
 
 .pbottom {
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    margin: 5px auto;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 10px auto; /* Increased margin for better spacing */
 }
 
 .pbottom .post-icon {
     display: flex;
     align-items: center;
     margin: 0 auto;
-    padding: 7px 40px;
+    padding: 10px 15px; /* Increased padding for better usability */
     cursor: pointer;
     transition: background 0.3s;
 }
 
 .pbottom .post-icon:hover {
-    background: #efefef;
-    border-radius: 8px;
+    background: #e0e0e0; /* Light background on hover */
+    border-radius: 8px; /* Rounded corners on hover */
 }
 
 .pbottom .post-icon input[type="file"] {
-    display: none; 
+    display: none; /* Hide the default file input */
 }
 
 .pbottom .post-icon label {
@@ -221,51 +249,52 @@ nav {
 }
 
 .pbottom .post-icon i {
-    margin-right: 8px; 
+    margin-right: 8px; /* Increased margin for better spacing */
 }
 
 .pbottom .post-icon p {
     margin: 0;
-    font-size: 14px; 
+    font-size: 14px; /* Increased font size for better readability */
 }
 
+/* Media Queries for Responsiveness */
 @media (max-width: 768px) {
     .main-content {
-        flex-direction: column; 
+        flex-direction: column; /* Stack the main content vertically */
     }
 
     .main-left, .main-right {
-        width: 100%; 
-        margin: 0; 
+        width: 100%; /* Full width for both sections */
+        margin: 0; /* Remove margins */
     }
 
     .nav-center a {
-        margin-left: 10px; 
+        margin-left: 10px; /* Adjust margin for smaller screens */
     }
 
     .nav-right a {
-        margin-left: 8px; 
+        margin-left: 8px; /* Adjust margin for smaller screens */
     }
 
     .pbottom {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* Two columns on smaller screens */
     }
 }
 
 @media (max-width: 480px) {
     .nav-center a {
-        font-size: 14px;
+        font-size: 14px; /* Smaller font size for icons */
     }
 
     .create-post textarea {
-        height: 100px; 
+        height: 100px; /* Decrease height for smaller screens */
     }
 
     .create-post button {
-        padding: 10px 15px;
+        padding: 10px 15px; /* Adjust button padding */
     }
 
     .posts h2, .recent-activities h2 {
-        font-size: 1.5em; 
+        font-size: 1.5em; /* Smaller heading size */
     }
 }

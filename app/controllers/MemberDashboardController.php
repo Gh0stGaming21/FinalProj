@@ -6,10 +6,11 @@ class MemberDashboardController {
         $this->pdo = $pdo;
     }
 
-    public function getRecentActivities() {
-        $stmt = $this->pdo->prepare("SELECT * FROM posts ORDER BY created_at DESC LIMIT 10");
+    public function getRecentActivities($memberId) {
+        $stmt = $this->pdo->prepare("SELECT * FROM activities WHERE member_id = :id ORDER BY created_at DESC LIMIT 10");
+        $stmt->bindParam(':id', $memberId);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll();
     }
 }
 

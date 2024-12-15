@@ -1,7 +1,6 @@
 <?php
 require_once './config/Database.php';  
 require_once './app/models/User.php';  
-require_once 'MemberDashboardController.php'; 
 
 class DashboardController
 {
