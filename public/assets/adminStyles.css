@@ -29,6 +29,10 @@ nav {
     align-items: center;
 }
 
+.nav-left h1{
+    background: #fff;
+}
+
 .nav-left .left {
     height: 40px;
     background: #e0e0e0; /* Slightly darker background for the welcome area */

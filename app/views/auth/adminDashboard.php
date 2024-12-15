@@ -90,9 +90,6 @@ if (!isset($_SESSION['user'])) {
                 </table>
             </div>
         </div>
-
-        
-    </div>
 </div>
 </body>
 </html>
