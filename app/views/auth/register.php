@@ -59,7 +59,6 @@
                 <?php unset($_SESSION['error']); // Clear the error after displaying it ?>
             <?php endif; ?>
             <button type="submit" name="login">Sign In</button>
-            <a href="?page=forgotpassword" class="forgot">Forgot Password?</a>
         </form>
     </div>
 

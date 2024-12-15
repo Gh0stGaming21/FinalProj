@@ -24,7 +24,6 @@ class Router {
             'dashboard' => 'handleDashboard',
             'admindashboard' => 'handleAdminDashboard',
             'register' => 'handleRegister',
-            'forgotpassword' => 'handleForgotPassword',
             'profile' => 'handleProfileView',
             'logout' => 'handleLogout',
             'events' => 'handleEvents',
@@ -155,11 +154,6 @@ class Router {
     private function handleRegister() {
         $controller = new AuthController();
         $controller->register();
-    }
-
-    private function handleForgotPassword() {
-        $controller = new AuthController();
-        $controller->forgotPassword();
     }
 
     private function loadView($viewFile, $data = []) {
