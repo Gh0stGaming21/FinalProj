@@ -7,9 +7,6 @@ class HelpRequestModel {
         $this->pdo = $pdo;
     }
 
-    /**
-     * Fetch all help requests with user information.
-     */
     public function getAllHelpRequests() {
         $stmt = $this->pdo->query("
             SELECT hr.id, hr.category, hr.description, hr.status, hr.created_at, u.name AS user_name
@@ -20,9 +17,6 @@ class HelpRequestModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Create a new help request.
-     */
     public function createHelpRequest($userId, $category, $description) {
         $stmt = $this->pdo->prepare("
             INSERT INTO help_requests (user_id, category, description, status, created_at)
