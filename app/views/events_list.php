@@ -1,14 +1,28 @@
 <?php
-if (session_status() == PHP_SESSION_NONE) {
+if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-if (!isset($_SESSION['user'])) { 
-    header('Location: login.php'); 
-    exit(); 
+if (!isset($_SESSION['user'])) {
+    header('Location: login.php');
+    exit();
 }
 
-// Fetch events (assuming you have a controller or method to do this)
-$events = []; // Replace with actual fetching logic
+require_once __DIR__ . '/../controllers/EventsController.php';
+
+$eventsController = new EventsController();
+
+// Fetch all events without filters
+$events = $eventsController->getEvents();
+
+// Handle RSVP submissions
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['event_id'])) {
+    $eventId = $_POST['event_id'];
+    $userId = $_SESSION['user']['id'];
+    $status = $_POST['status'] ?? 'attending';
+    $eventsController->rsvpToEvent($eventId, $userId, $status);
+    header("Location: ?page=events");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -19,8 +33,8 @@ $events = []; // Replace with actual fetching logic
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" 
           integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" 
           crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./public/assets/eventsStyle.css"> <!-- Link to your unique CSS file -->
-    <title>Upcoming Events</title>
+    <link rel="stylesheet" href="./public/assets/eventsStyle.css">
+    <title>Community Events</title>
 </head>
 <body>
 <div class="container">
@@ -28,6 +42,7 @@ $events = []; // Replace with actual fetching logic
         <div class="nav-left">
             <h1>Welcome, <?= htmlspecialchars($_SESSION['user']['name']); ?></h1>
         </div>
+        <button class="nav-toggle" onclick="toggleNav()">☰</button>
         <div class="nav-center">
             <a href="?page=dashboard"><i class="fa-solid fa-house"></i></a>
             <a href="?page=help_requests"><i class="fa-solid fa-tv"></i></a>
@@ -42,33 +57,24 @@ $events = []; // Replace with actual fetching logic
 
     <div class="main-content">
         <div class="main-left">
-            <h2>Upcoming Events</h2>
+            <h1>Community Events</h1>
+
             <?php if (!empty($events)): ?>
                 <ul class="events-list">
                     <?php foreach ($events as $event): ?>
                         <li class="event-item">
-                            <strong>
-                                <?= isset($event['name']) ? htmlspecialchars($event['name']) : 'No Event name'; ?>
-                            </strong><br>
-                            Location: <?= isset($event['location']) ? htmlspecialchars($event['location']) : 'No Location'; ?><br>
-                            <?php 
-                                if (isset($event['event_date'])) {
-                                    $date = new DateTime($event['event_date']);
-                                    echo "Date: " . $date->format('F j, Y');
-                                } else {
-                                    echo 'No Date';
-                                }
-                            ?><br>
-                            <form action="?page=events&action=rsvp" method="post">
-                                <input type="hidden" name="event_id" value="<?= htmlspecialchars($event['id']); ?>">
-                                <input type="hidden" name="user_id" value="<?= htmlspecialchars($_SESSION['user']['id']); ?>">
-                                <button type="submit" class="rsvp-button">RSVP</button>
+                            <h2><?= htmlspecialchars($event['name']); ?></h2>
+                            <p><?= htmlspecialchars($event['description']); ?></p>
+                            <p>Date: <?= htmlspecialchars($event['event_date']); ?></p>
+                            <form method="POST" action="">
+                                <input type="hidden" name="event_id" value="<?= $event['id']; ?>">
+                                <button type="submit" name="status" value="attending" class="rsvp-button">RSVP</button>
                             </form>
                         </li>
                     <?php endforeach; ?>
                 </ul>
             <?php else: ?>
-                <p>No events available.</p>
+                <p>No events found. Please check back later.</p>
             <?php endif; ?>
         </div>
     </div>

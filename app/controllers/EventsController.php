@@ -12,35 +12,41 @@ class EventsController {
     public function getEvents($filters = []) {
         $query = "SELECT * FROM events WHERE 1";
 
-        if (isset($filters['location'])) {
-            $query .= " AND location = :location";
+        if (!empty($filters['location'])) {
+            $query .= " AND location LIKE :location";
         }
 
-        if (isset($filters['date'])) {
-            $query .= " AND event_date >= :date";
+        if (!empty($filters['date'])) {
+            $query .= " AND event_date = :date";
         }
 
         $stmt = $this->pdo->prepare($query);
-        
-        if (isset($filters['location'])) {
-            $stmt->bindParam(':location', $filters['location']);
+
+        if (!empty($filters['location'])) {
+            $location = "%" . $filters['location'] . "%";
+            $stmt->bindParam(':location', $location);
         }
-        if (isset($filters['date'])) {
+
+        if (!empty($filters['date'])) {
             $stmt->bindParam(':date', $filters['date']);
         }
 
         $stmt->execute();
-        $events = $stmt->fetchAll(PDO::FETCH_ASSOC); 
-       
-        include __DIR__ . '/../views/events.php';  
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function rsvpToEvent($eventId, $userId) {
-        $query = "INSERT INTO event_rsvps (event_id, user_id) VALUES (:event_id, :user_id)";
-        $stmt = $this->pdo->prepare($query);
-        $stmt->bindParam(':event_id', $eventId);
-        $stmt->bindParam(':user_id', $userId);
-        $stmt->execute();
+    public function rsvpToEvent($eventId, $userId, $status = 'attending') {
+        try {
+            $query = "INSERT INTO events_rsvps (event_id, user_id, status) VALUES (:event_id, :user_id, :status)
+                      ON DUPLICATE KEY UPDATE status = :status";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->bindParam(':event_id', $eventId);
+            $stmt->bindParam(':user_id', $userId);
+            $stmt->bindParam(':status', $status);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Error in RSVP: " . $e->getMessage());
+        }
     }
 }
 ?>
