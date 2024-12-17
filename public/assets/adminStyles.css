@@ -29,17 +29,8 @@ nav {
     align-items: center;
 }
 
-.nav-left h1{
+.nav-left h1 {
     background: #fff;
-}
-
-.nav-left .left {
-    height: 40px;
-    background: #ffffff; /* Slightly darker background for the welcome area */
-    border-radius: 20px;
-    padding: 0 12px;
-    display: flex;
-    align-items: center;
 }
 
 .nav-center {
@@ -88,7 +79,7 @@ nav {
 }
 
 .nav-right a:hover i {
-    background: #b9b7b7; /* Darker background on hover */
+    background: #b9b7b7 ; /* Darker background on hover */
 }
 
 .nav-toggle {
@@ -109,8 +100,7 @@ nav {
         top: 60px; /* Below the navbar */
         left: 0;
         right: 0;
-        background: #ffffff;
-        /* White background */
+        background: #ffffff; /* White background */
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         z-index: 999; /* Ensure it appears above other content */
     }
@@ -149,7 +139,7 @@ nav {
     height: calc(100vh - 60px);
 }
 
-/* Pending Help Requests Section Styling */
+/* Requests Section Styling */
 .requests-card {
     width: 100%;
     background-color: #ffffff; /* White background for the requests section */
@@ -183,43 +173,14 @@ nav {
     background-color: #f9f9f9; /* Hover effect for rows */
 }
 
-.action-button {
-    padding: 5px 10px;
-    font-size: 14px;
-    border: none;
-    cursor: pointer;
+.requests-table ul {
+    list-style-type: none; /* Remove default list styling */
+    padding-left: 0; /* Remove padding */
 }
 
-.approve {
-    background-color: #28a745;
-    color: white;
-}
-
-.reject {
-    background-color: #dc3545;
-    color: white;
-}
-
-.approve:hover, .reject:hover {
-    opacity: 0.8;
-}
-
-/* Media Queries for Responsiveness */
-@media (max-width: 768px) {
-    .main-content {
-        flex-direction: column; /* Stack the main content vertically */
-    }
-
-    .main-left, .main-right {
-        width: 100%; /* Full width for both sections */
-        margin: 0; /* Remove margins */
-    }
-
-    .nav-center a {
-        margin-left: 10px; /* Adjust margin for smaller screens */
-    }
-
-    .nav-right a {
-        margin-left: 8px; /* Adjust margin for smaller screens */
-    }
+.requests-table ul li {
+    background: #e0f7fa; /* Light blue background for attendees */
+    margin: 5px 0; /* Space between attendees */
+    padding: 5px; /* Padding for each attendee */
+    border-radius: 3px; /* Rounded corners for attendees */
 }

@@ -21,6 +21,10 @@ $approvedRequests = $stmtApproved->fetchAll(PDO::FETCH_ASSOC);
 // Fetch rejected requests
 $stmtRejected = $pdo->query("SELECT hr.id, hr.category, hr.description, hr.status, hr.created_at, u.name AS user_name FROM help_requests hr JOIN users u ON hr.user_id = u.id WHERE hr.status = 'rejected' ORDER BY hr.created_at DESC");
 $rejectedRequests = $stmtRejected->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch events and their attendees
+$eventsController = new EventsController($pdo);
+$events = $eventsController->getEvents(); // Fetch all events
 ?>
 
 <!DOCTYPE html>
@@ -89,7 +93,50 @@ $rejectedRequests = $stmtRejected->fetchAll(PDO::FETCH_ASSOC);
                                     <td colspan="5">No pending requests found.</td>
                                 </tr>
                             <?php endif; ?>
-                        </ tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2>Events</h2>
+                <div class="requests-card">
+                    <table class="requests-table">
+                        <thead>
+                            <tr>
+                                <th>Event Name</th>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Attendees</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($events)): ?>
+                                <?php foreach ($events as $event): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($event['name']) ?></td>
+                                        <td><?= htmlspecialchars($event['event_date'] ?? 'N/A') ?></td>
+                                        <td><?= htmlspecialchars($event['description']) ?></td>
+                                        <td>
+                                            <ul>
+                                                <?php
+                                                $attendees = $eventsController->getEventAttendees($event['id']);
+                                                if (!empty($attendees)): 
+                                                    foreach ($attendees as $attendee): 
+                                                        echo "<li>" . htmlspecialchars($attendee['name']) . "</li>";
+                                                    endforeach; 
+                                                else: 
+                                                    echo "<li>No attendees yet.</li>";
+                                                endif; 
+                                                ?>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="4">No events found.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
                     </table>
                 </div>
             </div>

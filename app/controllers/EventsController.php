@@ -48,5 +48,13 @@ class EventsController {
             error_log("Error in RSVP: " . $e->getMessage());
         }
     }
+
+    public function getEventAttendees($eventId) {
+        $query = "SELECT u.name FROM events_rsvps er JOIN users u ON er.user_id = u.id WHERE er.event_id = :event_id";
+        $stmt = $this->pdo->prepare($query);
+        $stmt->bindParam(':event_id', $eventId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>

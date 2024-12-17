@@ -194,3 +194,40 @@ nav {
 .rsvp-button:hover {
     background: #218838; /* Darker shade on hover */
 }
+
+/* Add these styles to eventsStyle.css */
+.rsvp-button {
+    padding: 10px 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.rsvp-button:hover {
+    background-color: #45a049;
+}
+
+.events-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.event-item {
+    background-color: #fff;
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.event-item h2 {
+    margin-top: 0;
+}
+
+select {
+    padding: 5px 10px;
+    margin-right: 10px;
+}

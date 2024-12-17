@@ -14,9 +14,8 @@ class Router {
         $this->viewsBase = __DIR__ . '/../../views';
     }
 
-    public function route() {
+     public function route() {
         $page = strtolower($_GET['page'] ?? 'login');
-    
         $routeHandlers = [
             'login' => 'handleLogin',
             'help_requests' => 'handleHelpRequests',
@@ -29,10 +28,10 @@ class Router {
             'create_event' => 'handleCreateEvent',
             'resource_sharing' => 'handleResourceSharing',
             'create_post' => 'handleCreatePost',
-            'approve_request' => 'handleApproveRequest', 
-            'reject_request' => 'handleRejectRequest',   
+            'approve_request' => 'handleApproveRequest',
+            'reject_request' => 'handleRejectRequest',
         ];
-    
+
         if (isset($routeHandlers[$page])) {
             $this->{$routeHandlers[$page]}();
         } else {
