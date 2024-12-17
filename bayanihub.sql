@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 17, 2024 at 02:13 PM
+-- Generation Time: Dec 17, 2024 at 10:22 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -56,7 +56,7 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `name`, `description`, `event_date`, `created_by`, `created_at`) VALUES
-(1, 'new', 'Meeting', '2024-12-20', 11, '2024-12-12 07:07:18'),
+(1, 'Clean-up drive', 'Barangay clean-up drive,Everyone is expected to participate in this event.', '2024-12-20', 11, '2024-12-12 07:07:18'),
 (8, 'Community Meetup', 'A meetup for all community members.', '2024-01-20', 13, '2024-12-15 18:34:46');
 
 -- --------------------------------------------------------
@@ -79,7 +79,9 @@ CREATE TABLE `events_rsvps` (
 
 INSERT INTO `events_rsvps` (`id`, `event_id`, `user_id`, `status`, `created_at`) VALUES
 (1, 1, 27, 'attending', '2024-12-15 18:26:56'),
-(9, 8, 27, 'attending', '2024-12-15 18:35:10');
+(9, 8, 27, 'attending', '2024-12-15 18:35:10'),
+(21, 8, 11, 'attending', '2024-12-17 20:19:28'),
+(22, 1, 11, 'attending', '2024-12-17 20:19:31');
 
 -- --------------------------------------------------------
 
@@ -134,8 +136,8 @@ CREATE TABLE `posts` (
 --
 
 INSERT INTO `posts` (`id`, `user_id`, `post_text`, `post_image`, `post_video`, `post_type`, `created_at`, `updated_at`) VALUES
-(17, 27, '123', NULL, NULL, 'text', '2024-12-17 12:08:00', '2024-12-17 12:08:00'),
-(18, 27, 'hELP', NULL, NULL, 'text', '2024-12-17 12:15:22', '2024-12-17 12:15:22');
+(23, 11, 'HI', NULL, NULL, 'text', '2024-12-17 21:18:56', '2024-12-17 21:18:56'),
+(24, 11, 'Hello', NULL, NULL, 'text', '2024-12-17 21:19:01', '2024-12-17 21:19:01');
 
 -- --------------------------------------------------------
 
@@ -180,7 +182,8 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`, `reset_tok
 (12, 'admin', 'admin@gmail.com', '$2y$10$y70ErE3hZ9ql2yzYpOdSwuSzJWoVtP/0wQiP0Smyzm5MVaovB3ks.', '2024-12-12 04:42:53', NULL, NULL, 'admin', 'active'),
 (13, 'Super User', 'super@gmail.com', '$2y$10$wVvLjRUboNdQMZf3L59qZ.ejf/8juzXlWk8z30SoWAhwEPHTShcr2', '2024-12-12 04:56:20', NULL, NULL, 'member', 'active'),
 (14, 'admin2', 'admin2@gmail.com', '12345', '2024-12-12 05:54:19', NULL, NULL, 'admin', 'active'),
-(27, '11', '11@gmail.com', '$2y$10$9A1ukafBXngcS2PdVoA0k.IikrEbzjNzbMfn1IeUX746AyulqKNNi', '2024-12-14 06:10:00', '0289dd5a46849e7b88482b0d24e28a4b', NULL, 'admin', 'active');
+(27, '11', '11@gmail.com', '$2y$10$9A1ukafBXngcS2PdVoA0k.IikrEbzjNzbMfn1IeUX746AyulqKNNi', '2024-12-14 06:10:00', '0289dd5a46849e7b88482b0d24e28a4b', NULL, 'admin', 'active'),
+(29, 'meku', 'mekus@gmail.com', '$2y$10$7cpxlIO5gAJukqVlm6lPjen2SY1R5xMFI.j2aieAhxxdw3ndO1BQO', '2024-12-17 20:32:25', NULL, NULL, 'member', 'active');
 
 --
 -- Indexes for dumped tables
@@ -256,7 +259,7 @@ ALTER TABLE `events`
 -- AUTO_INCREMENT for table `events_rsvps`
 --
 ALTER TABLE `events_rsvps`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `help_requests`
@@ -268,7 +271,7 @@ ALTER TABLE `help_requests`
 -- AUTO_INCREMENT for table `posts`
 --
 ALTER TABLE `posts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `resources`
@@ -280,7 +283,7 @@ ALTER TABLE `resources`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- Constraints for dumped tables
