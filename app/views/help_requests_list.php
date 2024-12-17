@@ -9,13 +9,10 @@ if (!isset($_SESSION['user'])) {
     exit(); 
 }
 
-// Create an instance of HelpRequestController
 $helpRequestController = new HelpRequestController();
 
-// Handle form submission
 $helpRequestController->handleFormSubmission();
 
-// Fetch help requests
 $helpRequests = $helpRequestController->getHelpRequests();
 ?>
 <!DOCTYPE html>
@@ -26,30 +23,26 @@ $helpRequests = $helpRequestController->getHelpRequests();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" 
           integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" 
           crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./public/assets/dashStyle.css">
+    <link rel="stylesheet" href="./public/assets/helpStyle.css">
     <title>Help Requests</title>
 </head>
 <body>
 <div class="container">
-    <nav>
+<nav>
         <div class="nav-left">
             <h1>Welcome, <?= htmlspecialchars($_SESSION['user']['name']); ?></h1>
         </div>
-
-        <!-- Toggle Button for Mobile View -->
         <button class="nav-toggle" onclick="toggleNav()">☰</button>
-
         <div class="nav-center">
             <a href="?page=dashboard"><i class="fa-solid fa-house"></i></a>
             <a href="?page=help_requests"><i class="fa-solid fa-tv"></i></a>
             <a href="?page=resource_sharing"><i class="fa-solid fa-share"></i></a>
             <a href="?page=events"><i class="fa-solid fa-calendar"></i></a>
         </div>
-
         <div class="nav-right">
-            <a href="?page=profile"><i class="fa-solid fa-user"></i></a>
-            <a href="?page=logout"><i class="fa-solid fa-right-from-bracket"></i></a>
-        </div>
+    <a href="?page=profile"><i class="fa-solid fa-user"></i></a>
+    <a href="?page=logout" onclick="return confirmLogout();"><i class="fa-solid fa-right-from-bracket"></i></a>
+</div>
     </nav>
 
     <div class="main-content">
@@ -108,6 +101,10 @@ function toggleNav() {
     const navCenter = document.querySelector('.nav-center');
     navCenter.classList.toggle('active');
 }
+
+function confirmLogout() {
+        return confirm("Are you sure you want to log out?");
+    }
 </script>
 </body>
 </html>

@@ -42,9 +42,9 @@ $recentActivities = $recentActivities->fetchAll();
             <a href="?page=events"><i class="fa-solid fa-calendar"></i></a>
         </div>
         <div class="nav-right">
-            <a href="?page=profile"><i class="fa-solid fa-user"></i></a>
-            <a href="?page=logout"><i class="fa-solid fa-right-from-bracket"></i></a>
-        </div>
+    <a href="?page=profile"><i class="fa-solid fa-user"></i></a>
+    <a href="?page=logout" onclick="return confirmLogout();"><i class="fa-solid fa-right-from-bracket"></i></a>
+</div>
     </nav>
 
     <div class="main-content">
@@ -108,6 +108,10 @@ $recentActivities = $recentActivities->fetchAll();
     function toggleNav() {
         const navCenter = document.querySelector('.nav-center');
         navCenter.classList.toggle('active');
+    }
+
+    function confirmLogout() {
+        return confirm("Are you sure you want to log out?");
     }
 </script>
 </body>

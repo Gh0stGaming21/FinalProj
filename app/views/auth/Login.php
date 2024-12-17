@@ -22,7 +22,7 @@
             </div>
             <?php if (isset($_SESSION['error'])): ?>
                 <p class="error"><?php echo htmlspecialchars($_SESSION['error']); ?></p>
-                <?php unset($_SESSION['error']); // Clear the error after displaying it ?>
+                <?php unset($_SESSION['error']);?>
             <?php endif; ?>
             <button type="submit" name="login">Sign In</button>
         </form>

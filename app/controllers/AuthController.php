@@ -26,8 +26,7 @@ class AuthController {
                 exit;
             }
     
-            // Authenticate User
-            $user = $this->userModel->authenticateUser ($email, $password);
+            $user = $this->userModel->authenticateUser($email, $password);
     
             if ($user === 'inactive') {
                 $_SESSION['error'] = "Your account is inactive. Please contact support.";
@@ -57,31 +56,45 @@ class AuthController {
     }
 
     public function register() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+    
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $name = trim($_POST['name']);
             $email = filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL);
             $password = trim($_POST['password']);
-
+  
             if (empty($name) || empty($email) || empty($password)) {
                 $_SESSION['error'] = "All fields are required.";
+                header("Location: ?page=register");
+                exit;
+            }
+    
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $_SESSION['error'] = "Invalid email format.";
+                header("Location: ?page=register");
+                exit;
+            }
+   
+            if (strlen($password) < 6) {
+                $_SESSION['error'] = "Password must be at least 6 characters long.";
                 header("Location: ?page=register");
                 exit;
             }
 
             if ($this->userModel->register($name, $email, $password)) {
                 $_SESSION['success'] = "Registration successful! You can now log in.";
-                header("Location: ?page=register");
+                header("Location: ?page=login");
                 exit;
             } else {
-                $_SESSION['error'] = "Registration failed. Please try again.";
+                $_SESSION['error'] = "Registration failed. Email might already be registered.";
+                header("Location: ?page=register");
+                exit;
             }
         }
-
+    
         include './app/views/auth/register.php';
-    }
-
-    public function forgotPassword() {
-        // To implement later
     }
 
     public function logout() {
