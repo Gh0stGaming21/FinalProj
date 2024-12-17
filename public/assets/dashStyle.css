@@ -1,3 +1,4 @@
+/* Global Styles */
 * {
     margin: 0;
     padding: 0;
@@ -5,23 +6,24 @@
 }
 
 body {
-    background: #f4f4f4; /* Lighter background for better contrast */
-    color: #333; /* Darker text for better readability */
+    background: #f4f4f4;
+    color: #333;
     font-family: 'Arial', sans-serif;
 }
 
+/* Navbar Styles */
 nav {
     width: 100%;
     height: 60px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #ffffff; /* White background for the navbar */
+    background: #ffffff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: fixed;
     z-index: 1000;
     top: 0;
-    padding: 0 20px; /* Increased padding for better spacing */
+    padding: 0 20px;
 }
 
 .nav-left {
@@ -29,52 +31,12 @@ nav {
     align-items: center;
 }
 
-.nav-left .left {
-    height: 40px;
-    background: #e0e0e0; /* Slightly darker background for the welcome area */
-    border-radius: 20px;
-    padding: 0 12px;
-    display: flex;
-    align-items: center;
-}
-
-.nav-center {
-    display: flex;
-    align-items: center;
-}
-
-.nav-center a {
-    margin-left: 20px; /* Increased margin for better spacing */
+.nav-center a, .nav-right a {
     text-decoration: none;
 }
 
-.nav-center i {
-    background: none;
-    border-radius: 10px;
-    font-size: 24px; /* Slightly larger icons */
-    padding: 15px 25px; /* Increased padding for better click area */
-    color: #646262;
-    transition: background 0.3s, color 0.3s;
-}
-
-.nav-center a:hover i {
-    background: #e0e0e0; /* Light background on hover */
-    color: #252525; /* Darker text on hover */
-}
-
-.nav-right {
-    display: flex;
-    align-items: center;
-}
-
-.nav-right a {
-    margin-left: 12px;
-}
-
 .nav-right i {
-    background: #e0e0e0; /* Light background for icons */
-    height: 40px;
-    width: 40px;
+    background: #e0e0e0;
     border-radius: 50%;
     font-size: 22px;
     display: flex;
@@ -83,218 +45,76 @@ nav {
     transition: background 0.3s;
 }
 
-.nav-right a:hover i {
-    background: #b9b7b7; /* Darker background on hover */
-}
-
 .nav-toggle {
-    display: none; /* Hide toggle button by default */
-    background: none;
-    border: none;
-    font-size: 24px; /* Larger font for the toggle button */
-    cursor: pointer;
-    margin-left: 20px; /* Align with other nav items */
+    display: none;
+    font-size: 24px;
 }
 
-/* Media Queries for Responsiveness */
-@media (max-width: 768px) {
-    .nav-center {
-        display: none; /* Hide by default */
-        flex-direction: column; /* Stack vertically */
-        position: absolute; /* Position it absolutely */
-        top: 60px; /* Below the navbar */
-        left: 0;
-        right: 0;
-        background: #ffffff;
-        /* White background */
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        z-index: 999; /* Ensure it appears above other content */
-    }
-
-    .nav-center.active {
-        display: flex; /* Show when active */
-    }
-
-    .nav-toggle {
-        display: block; /* Show toggle button */
-    }
-}
-
-@media (min-width: 769px) {
-    .nav-toggle {
-        display: none; /* Hide toggle button on larger screens */
-    }
-}
-
-.main-content {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 60px; /* Adjust the margin to match the height of the nav bar */
-    padding: 20px; /* Added padding for better spacing */
-}
-
-.main-left {
-    width: 65%; /* Adjusted width for better layout */
-    margin-right: 20px; /* Added margin for spacing */
-}
-
-.main-right {
-    width: 30%;
-    margin-left: 20px; /* Added margin for spacing */
-    overflow-y: auto;
-    height: calc(100vh - 60px);
-}
-
+/* Create Post Section */
 .create-post {
-    width: 100%;
-    background: #ffffff; /* White background for the post area */
+    position: relative; /* Establish relative positioning context */
+    background: #ffffff;
     padding: 20px;
-    border-radius: 8px; /* Slightly larger border radius */
+    border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px; /* Added margin for spacing */
+    margin-bottom: 20px;
 }
 
 .create-post textarea {
     width: 100%;
-    height: 120px; /* Increased height for better usability */
-    padding: 12px; /* Increased padding for better usability */
+    height: 120px;
+    padding: 12px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    margin-bottom: 15px; /* Increased margin for better spacing */
-    font-size: 16px; /* Increased font size for better readability */
+    margin-bottom: 15px;
 }
 
-.create-post button {
-    background: #007bff; /* Bootstrap primary color */
+/* Post Button Positioning */
+.post-button-wrapper {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+}
+
+.post-button {
+    background: #007bff;
     color: #fff;
     border: none;
-    padding: 12px 20px; /* Increased padding for better usability */
+    padding: 12px 20px;
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s;
 }
 
-.create-post button:hover {
-    background: #0056b3; /* Darker shade on hover */
+.post-button:hover {
+    background: #0056b3;
 }
 
-.posts, .recent-activities {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    height: auto;
-    cursor: pointer;
-    border-radius: 8px; /* Increased border radius for a softer look */
-    padding: 15px; /* Increased padding for better spacing */
-    background: #ffffff; /* White background for posts */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px; /* Added margin for spacing */
-}
-
-.posts h2, .recent-activities h2 {
-    margin-bottom: 15px; /* Increased margin for better spacing */
-    font-size: 1.8em; /* Larger font size for headings */
-    color: #007bff; /* Bootstrap primary color for headings */
-}
-
-.posts ul, .recent-activities ul {
+/* Posts Section */
+.posts ul {
     list-style-type: none;
-    width: 100%;
 }
-
-.posts li, .recent-activities li {
-    padding: 12px 0; /* Increased padding for better spacing */
+.posts li {
+    padding: 12px 0;
     border-bottom: 1px solid #e0e0e0;
-    transition: background 0.3s;
 }
 
-.posts li:hover, .recent-activities li:hover {
-    background: #f9f9f9; /* Light background on hover */
+/* Success Message */
+.success-message {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px;
+    margin: 20px 0;
+    border: 1px solid #c3e6cb;
+    border-radius: 5px;
 }
 
-.posts li:last-child, .recent-activities li:last-child {
-    border-bottom: none; /* Remove border for the last item */
-}
-
-.pbottom {
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    margin: 10px auto; /* Increased margin for better spacing */
-}
-
-.pbottom .post-icon {
-    display: flex;
-    align-items: center;
-    margin: 0 auto;
-    padding: 10px 15px; /* Increased padding for better usability */
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.pbottom .post-icon:hover {
-    background: #e0e0e0; /* Light background on hover */
-    border-radius: 8px; /* Rounded corners on hover */
-}
-
-.pbottom .post-icon input[type="file"] {
-    display: none; /* Hide the default file input */
-}
-
-.pbottom .post-icon label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-.pbottom .post-icon i {
-    margin-right: 8px; /* Increased margin for better spacing */
-}
-
-.pbottom .post-icon p {
-    margin: 0;
-    font-size: 14px; /* Increased font size for better readability */
-}
-
-/* Media Queries for Responsiveness */
+/* Responsive Design */
 @media (max-width: 768px) {
     .main-content {
-        flex-direction: column; /* Stack the main content vertically */
+        flex-direction: column;
     }
-
-    .main-left, .main-right {
-        width: 100%; /* Full width for both sections */
-        margin: 0; /* Remove margins */
-    }
-
-    .nav-center a {
-        margin-left: 10px; /* Adjust margin for smaller screens */
-    }
-
-    .nav-right a {
-        margin-left: 8px; /* Adjust margin for smaller screens */
-    }
-
-    .pbottom {
-        grid-template-columns: repeat(2, 1fr); /* Two columns on smaller screens */
-    }
-}
-
-@media (max-width: 480px) {
-    .nav-center a {
-        font-size: 14px; /* Smaller font size for icons */
-    }
-
-    .create-post textarea {
-        height: 100px; /* Decrease height for smaller screens */
-    }
-
-    .create-post button {
-        padding: 10px 15px; /* Adjust button padding */
-    }
-
-    .posts h2, .recent-activities h2 {
-        font-size: 1.5em; /* Smaller heading size */
+    .nav-toggle {
+        display: block;
     }
 }

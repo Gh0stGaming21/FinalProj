@@ -4,7 +4,6 @@ require_once __DIR__ . '/../controllers/ResourceSharingController.php';
 require_once __DIR__ . '/../controllers/EventsController.php';  
 require_once __DIR__ . '/../controllers/PostController.php';
 
-
 class Router {
     private $viewsBase;
 
@@ -73,7 +72,6 @@ class Router {
         require_once './app/views/profile.php';
     }
 
-
     private function handleHelpRequests() {
         if (!class_exists('HelpRequestController')) {
             echo "HelpRequestController class not found!";
@@ -124,28 +122,15 @@ class Router {
 
         $postType = $_POST['post_type'] ?? null;
         $postText = $_POST['post_text'] ?? null;
-        $postVideo = $_FILES['post_video'] ?? null;
-        $postImage = $_FILES['post_image'] ?? null;
-
-        echo '<pre>';
-    print_r($_POST);
-    print_r($_FILES);
-    echo '</pre>';
-    exit;
 
         try {
             if ($postType === 'text' && !empty($postText)) {
                 $controller->createTextPost($user['id'], $postText);
-            } elseif ($postType === 'video' && $postVideo) {
-                $controller->createVideoPost($user['id'], $postVideo);
-            } elseif ($postType === ' image' && $postImage) {
-                $controller->createImagePost($user['id'], $postImage);
+                header("Location: ?page=dashboard&success=true");
+                exit;
             } else {
                 throw new Exception("Invalid post data.");
             }
-
-            header("Location: ?page=dashboard");
-            exit;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
@@ -197,88 +182,9 @@ class Router {
             case 'rsvp':
                 $eventId = $_POST['id'] ?? null;
                 $userId = $_POST['user_id'] ?? null;
-    
-                if ($eventId && $userId) {
-                    $eventsController->rsvpToEvent($eventId, $userId);
-                } else {
-                    echo "Missing event_id or user_id.";
-                }
-                break;
-    
-            default:
-                $this->show404();
+                // RSVP handling logic here
                 break;
         }
-    }
-    
-    public function create() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $event_name = isset($_POST['event_name']) ? htmlspecialchars($_POST['event_name']) : '';
-            $location = isset($_POST['location']) ? htmlspecialchars($_POST['location']) : '';
-            $event_date = isset($_POST['event_date']) ? $_POST['event_date'] : '';
-
-            if (empty($event_name) || empty($location) || empty($event_date)) {
-                $_SESSION['error'] = 'All fields are required.';
-                header('Location: ?page=events&action=create');
-                exit();
-            }
-
-            $query = "INSERT INTO events (event_name, location, event_date) VALUES (:event_name, :location, :event_date)";
-            $stmt = $this->pdo->prepare($query);
-            $stmt->bindParam(':event_name', $event_name);
-            $stmt->bindParam(':location', $location);
-            $stmt->bindParam(':event_date', $event_date);
-
-            if ($stmt->execute()) {
-                $_SESSION['success'] = 'Event created successfully!';
-            } else {
-                $_SESSION['error'] = 'Failed to create event. Please try again.';
-            }
-            header('Location: ?page=events');
-            exit();
-        }
-
-        $this->loadView('create_event.php');
-    }
-
-    private function handleResourceSharing() {
-        $filters = [];
-
-        if (isset($_GET['location']) && !empty($_GET['location'])) {
-            $filters['location'] = $_GET['location'];
-        }
-        if (isset($_GET['date']) && !empty($_GET['date'])) {
-            $filters['date'] = $_GET['date'];
-        }
-
-        $controller = new ResourceSharingController();
-        $resources = $controller->getResources($filters);
-        $this->loadView('resource_sharing.php', ['resources' => $resources]);
-    }
-
-    private function handleAdminDashboard() {
-        if (!isset($_SESSION['user'])) {
-            echo "No user session found. Redirecting to login.";
-            header("Location: ?page=login");
-            exit;
-        }
-
-        $user = $_SESSION['user'];
-
-        if ($user['role'] !== 'admin') {
-            echo "Access Denied: You are not an admin.";
-            header("Location: ?page=login");
-            exit;
-        }
-
-        $database = new Database();
-        $pdo = $database->connect();
-
-        $controller = new DashboardController($pdo);
-        $pendingRequests = $controller->getPendingRequests();
-        $this->loadView('auth/adminDashboard.php', ['pendingRequests' => $pendingRequests]);
     }
 }
-
-
 ?>

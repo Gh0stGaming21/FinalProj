@@ -34,13 +34,27 @@ class DashboardController
         }
     }
 
-    public function getRecentActivities() {
-        $stmt = $this->pdo->prepare("SELECT * FROM activities ORDER BY created_at DESC LIMIT 10");
-        $stmt->execute();
-        return $stmt->fetchAll();
+    public function getRecentActivities()
+    {
+        try {
+            $stmt = $this->pdo->prepare("SELECT 
+                                            a.activity_type, 
+                                            a.activity_text, 
+                                            a.created_at, 
+                                            u.name AS user_name 
+                                          FROM activities a
+                                          INNER JOIN users u ON a.user_id = u.id
+                                          ORDER BY a.created_at DESC 
+                                          LIMIT 10");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error fetching recent activities: " . $e->getMessage());
+            return []; // Return an empty array on error
+        }
     }
 
-    public function getUserDashboardData()
+    public function getUserDashboardData() // Corrected method name
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -57,11 +71,7 @@ class DashboardController
 
         $userModel = new User($db);
         $totalUsers = $userModel->getTotalUsers();
-
-        $recentActivities = [
-            ['activity' => 'Logged in', 'created_at' => '2024-12-09'],
-            ['activity' => 'Updated profile', 'created_at' => '2024-12-08'],
-        ];
+        $recentActivities = $this->getRecentActivities(); 
 
         return [
             'totalUsers' => $totalUsers,
