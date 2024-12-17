@@ -66,20 +66,22 @@ $recentActivities = $recentActivities->fetchAll();
             <?php endif; ?>
 
             <div class="posts">
-                <h2>Posts</h2>
-                <ul>
-                    <?php if (!empty($posts)): ?>
-                        <?php foreach ($posts as $post): ?>
-                            <li>
-                                <h3><?= htmlspecialchars($post['post_text']); ?></h3>
-                                <p>Posted on: <?= htmlspecialchars($post['created_at']); ?></p>
-                            </li>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p>No posts available.</p>
-                    <?php endif; ?>
-                </ul>
-            </div>
+    <h2>Posts</h2>
+    <ul>
+        <?php if (!empty($posts)): ?>
+            <?php foreach ($posts as $post): ?>
+                <li>
+                    <h3><?= htmlspecialchars($post['post_text']); ?></h3>
+                    <p>Posted on: <?= htmlspecialchars($post['created_at']); ?></p>
+                    <a href="?page=dashboard&delete_post_id=<?= $post['id']; ?>" class="delete-button" onclick="return confirm('Are you sure you want to delete this post?');">Delete</a>
+                </li>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No posts available.</p>
+        <?php endif; ?>
+    </ul>
+</div>
+
         </div>
 
         <div class="main-right">

@@ -305,6 +305,10 @@ nav {
     padding: 5px;
     background-color: #f1f1f1;
     border-radius: 5px;
+    display: block; 
+    margin-top: 20px; 
+    width: 100px;
+    
 }
 
 .delete-button:hover {

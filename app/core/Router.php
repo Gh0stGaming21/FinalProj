@@ -132,6 +132,20 @@ class Router {
         $database = new Database();
         $pdo = $database->connect();
     
+        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['delete_post_id'])) {
+            // Handle post deletion
+            $postId = $_GET['delete_post_id'];
+            $controller = new PostController($pdo);
+    
+            try {
+                $controller->deletePost($postId, $user['id']);
+                header("Location: ?page=dashboard&success=true");
+                exit;
+            } catch (Exception $e) {
+                echo "Error deleting post: " . $e->getMessage();
+            }
+        }
+        
         if ($user['role'] === 'admin') {
             $controller = new DashboardController($pdo);
             $pendingRequests = $controller->getPendingRequests();
