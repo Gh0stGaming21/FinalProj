@@ -50,11 +50,11 @@ class DashboardController
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             error_log("Error fetching recent activities: " . $e->getMessage());
-            return []; // Return an empty array on error
+            return []; 
         }
     }
 
-    public function getUserDashboardData() // Corrected method name
+    public function getUserDashboardData() 
     {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();

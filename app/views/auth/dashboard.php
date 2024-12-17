@@ -53,7 +53,7 @@ $recentActivities = $recentActivities->fetchAll();
                 <form method="POST" action="?page=create_post">
                     <div class="ptop">
                         <textarea name="post_text" placeholder="What's your request?" required></textarea>
-                        <input type="hidden" name="post_type" value="text"> <!-- Hidden input for post type -->
+                        <input type="hidden" name="post_type" value="text"> 
                     </div>
                     <div class="post-button-wrapper">
                         <button type="submit" class="post-button">Post</button>

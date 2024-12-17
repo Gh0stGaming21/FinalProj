@@ -149,41 +149,35 @@ class Router {
             header("Location: ?page=login");
             exit;
         }
-
+    
         $user = $_SESSION['user'];
-        
+    
         $database = new Database();
         $pdo = $database->connect();
         $controller = new PostController($pdo);
-
-        $postType = $_POST['post_type'] ?? null;
+    
         $postText = $_POST['post_text'] ?? null;
-        $postVideo = $_FILES['post_video'] ?? null;
-        $postImage = $_FILES['post_image'] ?? null;
-
-        echo '<pre>';
-    print_r($_POST);
-    print_r($_FILES);
-    echo '</pre>';
-    exit;
-
+        $postType = $_POST['post_type'] ?? 'text';  
+    
         try {
-            if ($postType === 'text' && !empty($postText)) {
-                $controller->createTextPost($user['id'], $postText);
-            } elseif ($postType === 'video' && $postVideo) {
-                $controller->createVideoPost($user['id'], $postVideo);
-            } elseif ($postType === ' image' && $postImage) {
-                $controller->createImagePost($user['id'], $postImage);
-            } else {
-                throw new Exception("Invalid post data.");
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+           
+                if ($postType === 'text' && !empty($postText)) {
+              
+                    $controller->createTextPost($user['id'], $postText);
+                } else {
+                    throw new Exception("Invalid post data.");
+                }
+    
+                header("Location: ?page=dashboard&success=true");
+                exit;
             }
-
-            header("Location: ?page=dashboard");
-            exit;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
     }
+    
+    
 
     private function handleRegister() {
         $controller = new AuthController();
