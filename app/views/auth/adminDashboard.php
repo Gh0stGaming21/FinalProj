@@ -7,11 +7,20 @@ if (!isset($_SESSION['user'])) {
     exit(); 
 }
 
-// Assuming you have a database connection and fetching pending requests
 $database = new Database();
 $pdo = $database->connect();
+
+// Fetch pending requests
 $stmt = $pdo->query("SELECT hr.id, hr.category, hr.description, hr.status, hr.created_at, u.name AS user_name FROM help_requests hr JOIN users u ON hr.user_id = u.id WHERE hr.status = 'open' ORDER BY hr.created_at DESC");
 $pendingRequests = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch approved requests
+$stmtApproved = $pdo->query("SELECT hr.id, hr.category, hr.description, hr.status, hr.created_at, u.name AS user_name FROM help_requests hr JOIN users u ON hr.user_id = u.id WHERE hr.status = 'resolved' ORDER BY hr.created_at DESC");
+$approvedRequests = $stmtApproved->fetchAll(PDO::FETCH_ASSOC);
+
+// Fetch rejected requests
+$stmtRejected = $pdo->query("SELECT hr.id, hr.category, hr.description, hr.status, hr.created_at, u.name AS user_name FROM help_requests hr JOIN users u ON hr.user_id = u.id WHERE hr.status = 'rejected' ORDER BY hr.created_at DESC");
+$rejectedRequests = $stmtRejected->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -22,8 +31,6 @@ $pendingRequests = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css">
     <link rel="stylesheet" href="./public/assets/adminstyles.css">
-
-    
 </head>
 <body>
     <div class="container">
@@ -80,6 +87,38 @@ $pendingRequests = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php else: ?>
                                 <tr>
                                     <td colspan="5">No pending requests found.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </ tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="main-right">
+                <h2>Approved Help Requests</h2>
+                <div class="requests-card">
+                    <table class="requests-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Category</th>
+                                <th>Description</th>
+                                <th>Created At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($approvedRequests)): ?>
+                                <?php foreach ($approvedRequests as $request): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($request['user_name']) ?></td>
+                                        <td><?= htmlspecialchars($request['category']) ?></td>
+                                        <td><?= htmlspecialchars($request['description']) ?></td>
+                                        <td><?= htmlspecialchars($request['created_at']) ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="4">No approved requests found.</td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>

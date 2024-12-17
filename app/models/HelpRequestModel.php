@@ -29,9 +29,6 @@ class HelpRequestModel {
         ]);
     }
 
-    /**
-     * Update the status of a help request.
-     */
     public function updateRequestStatus($requestId, $status) {
         $stmt = $this->pdo->prepare("
             UPDATE help_requests
@@ -43,5 +40,16 @@ class HelpRequestModel {
             ':request_id' => $requestId,
         ]);
     }
+
+    public function getRequestsByStatus($status) {
+        $stmt = $this->pdo->prepare("
+            SELECT hr.id, hr.category, hr.description, hr.status, hr.created_at, u.name AS user_name
+            FROM help_requests hr
+            JOIN users u ON hr.user_id = u.id
+            WHERE hr.status = :status
+            ORDER BY hr.created_at DESC
+        ");
+        $stmt->execute([':status' => $status]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
-?>

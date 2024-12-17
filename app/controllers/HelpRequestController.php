@@ -12,9 +12,6 @@ class HelpRequestController {
         $this->helpRequestModel = new HelpRequestModel($pdo);
     }
 
-    /**
-     * Fetch and return all help requests.
-     */
     public function getHelpRequests() {
         try {
             return $this->helpRequestModel->getAllHelpRequests();
@@ -24,9 +21,24 @@ class HelpRequestController {
         }
     }
 
-    /**
-     * Handle help request form submissions.
-     */
+    public function getApprovedRequests() {
+        try {
+            return $this->helpRequestModel->getRequestsByStatus('resolved');
+        } catch (Exception $e) {
+            error_log("Error fetching approved requests: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getRejectedRequests() {
+        try {
+            return $this->helpRequestModel->getRequestsByStatus('rejected');
+        } catch (Exception $e) {
+            error_log("Error fetching rejected requests: " . $e->getMessage());
+            return [];
+        }
+    }
+
     public function handleFormSubmission() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $this->ensureSessionIsValid();
@@ -50,12 +62,9 @@ class HelpRequestController {
         }
     }
 
-    /**
-     * Approve a help request.
-     */
     public function approveRequest($requestId) {
         try {
-            $stmt = $this->helpRequestModel->updateRequestStatus($requestId, 'resolved');
+            $this->helpRequestModel->updateRequestStatus($requestId, 'resolved');
             header('Location: ?page=admindashboard&success=approved');
         } catch (Exception $e) {
             error_log("Error approving request: " . $e->getMessage());
@@ -63,12 +72,10 @@ class HelpRequestController {
         }
     }
 
-    /**
-     * Reject a help request.
-     */
     public function rejectRequest($requestId) {
         try {
-            $stmt = $this->helpRequestModel->updateRequestStatus($requestId, 'resolved'); // You can change this to a different status if needed
+            error_log("Rejecting request ID: " . $requestId); // Debugging line
+            $this->helpRequestModel->updateRequestStatus($requestId, 'rejected');
             header('Location: ?page=admindashboard&success=rejected');
         } catch (Exception $e) {
             error_log("Error rejecting request: " . $e->getMessage());
@@ -76,9 +83,6 @@ class HelpRequestController {
         }
     }
 
-    /**
-     * Ensure the session is valid and the user is authenticated.
-     */
     private function ensureSessionIsValid() {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
@@ -91,13 +95,9 @@ class HelpRequestController {
         }
     }
 
-    /**
-     * Redirect with an error message.
-     */
     private function redirectWithError($message, $redirectUrl) {
         $_SESSION['error'] = $message;
         header("Location: $redirectUrl");
         exit;
     }
 }
-?>
