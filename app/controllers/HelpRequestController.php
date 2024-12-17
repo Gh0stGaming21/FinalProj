@@ -51,6 +51,32 @@ class HelpRequestController {
     }
 
     /**
+     * Approve a help request.
+     */
+    public function approveRequest($requestId) {
+        try {
+            $stmt = $this->helpRequestModel->updateRequestStatus($requestId, 'resolved');
+            header('Location: ?page=admindashboard&success=approved');
+        } catch (Exception $e) {
+            error_log("Error approving request: " . $e->getMessage());
+            header('Location: ?page=admindashboard&error=approve_failed');
+        }
+    }
+
+    /**
+     * Reject a help request.
+     */
+    public function rejectRequest($requestId) {
+        try {
+            $stmt = $this->helpRequestModel->updateRequestStatus($requestId, 'resolved'); // You can change this to a different status if needed
+            header('Location: ?page=admindashboard&success=rejected');
+        } catch (Exception $e) {
+            error_log("Error rejecting request: " . $e->getMessage());
+            header('Location: ?page=admindashboard&error=reject_failed');
+        }
+    }
+
+    /**
      * Ensure the session is valid and the user is authenticated.
      */
     private function ensureSessionIsValid() {
@@ -74,3 +100,4 @@ class HelpRequestController {
         exit;
     }
 }
+?>

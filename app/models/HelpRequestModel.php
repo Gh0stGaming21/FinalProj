@@ -28,4 +28,20 @@ class HelpRequestModel {
             ':description' => $description,
         ]);
     }
+
+    /**
+     * Update the status of a help request.
+     */
+    public function updateRequestStatus($requestId, $status) {
+        $stmt = $this->pdo->prepare("
+            UPDATE help_requests
+            SET status = :status
+            WHERE id = :request_id
+        ");
+        $stmt->execute([
+            ':status' => $status,
+            ':request_id' => $requestId,
+        ]);
+    }
 }
+?>

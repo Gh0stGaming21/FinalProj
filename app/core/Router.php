@@ -29,12 +29,48 @@ class Router {
             'create_event' => 'handleCreateEvent',
             'resource_sharing' => 'handleResourceSharing',
             'create_post' => 'handleCreatePost',
+            'approve_request' => 'handleApproveRequest', 
+            'reject_request' => 'handleRejectRequest',   
         ];
     
         if (isset($routeHandlers[$page])) {
             $this->{$routeHandlers[$page]}();
         } else {
             $this->show404();
+        }
+    }
+
+    private function handleApproveRequest() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $requestId = $_POST['request_id'] ?? null;
+            if ($requestId) {
+                $database = new Database();
+                $pdo = $database->connect();
+                $controller = new HelpRequestController($pdo);
+                if ($controller->approveRequest($requestId)) {
+                    header('Location: ?page=admindashboard&success=approved');
+                } else {
+                    header('Location: ?page=admindashboard&error=approve_failed');
+                }
+                exit();
+            }
+        }
+    }
+
+    private function handleRejectRequest() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $requestId = $_POST['request_id'] ?? null;
+            if ($requestId) {
+                $database = new Database();
+                $pdo = $database->connect();
+                $controller = new HelpRequestController($pdo);
+                if ($controller->rejectRequest ($requestId)) {
+                    header('Location: ?page=admindashboard&success=rejected');
+                } else {
+                    header('Location: ?page=admindashboard&error=reject_failed');
+                }
+                exit();
+            }
         }
     }
 
@@ -71,6 +107,7 @@ class Router {
     public function handleProfileView() {
         require_once './app/views/profile.php';
     }
+
 
     private function handleHelpRequests() {
         if (!class_exists('HelpRequestController')) {
@@ -122,15 +159,28 @@ class Router {
 
         $postType = $_POST['post_type'] ?? null;
         $postText = $_POST['post_text'] ?? null;
+        $postVideo = $_FILES['post_video'] ?? null;
+        $postImage = $_FILES['post_image'] ?? null;
+
+        echo '<pre>';
+    print_r($_POST);
+    print_r($_FILES);
+    echo '</pre>';
+    exit;
 
         try {
             if ($postType === 'text' && !empty($postText)) {
                 $controller->createTextPost($user['id'], $postText);
-                header("Location: ?page=dashboard&success=true");
-                exit;
+            } elseif ($postType === 'video' && $postVideo) {
+                $controller->createVideoPost($user['id'], $postVideo);
+            } elseif ($postType === ' image' && $postImage) {
+                $controller->createImagePost($user['id'], $postImage);
             } else {
                 throw new Exception("Invalid post data.");
             }
+
+            header("Location: ?page=dashboard");
+            exit;
         } catch (Exception $e) {
             echo "Error: " . $e->getMessage();
         }
@@ -182,9 +232,88 @@ class Router {
             case 'rsvp':
                 $eventId = $_POST['id'] ?? null;
                 $userId = $_POST['user_id'] ?? null;
-                // RSVP handling logic here
+    
+                if ($eventId && $userId) {
+                    $eventsController->rsvpToEvent($eventId, $userId);
+                } else {
+                    echo "Missing event_id or user_id.";
+                }
+                break;
+    
+            default:
+                $this->show404();
                 break;
         }
     }
+    
+    public function create() {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $event_name = isset($_POST['event_name']) ? htmlspecialchars($_POST['event_name']) : '';
+            $location = isset($_POST['location']) ? htmlspecialchars($_POST['location']) : '';
+            $event_date = isset($_POST['event_date']) ? $_POST['event_date'] : '';
+
+            if (empty($event_name) || empty($location) || empty($event_date)) {
+                $_SESSION['error'] = 'All fields are required.';
+                header('Location: ?page=events&action=create');
+                exit();
+            }
+
+            $query = "INSERT INTO events (event_name, location, event_date) VALUES (:event_name, :location, :event_date)";
+            $stmt = $this->pdo->prepare($query);
+            $stmt->bindParam(':event_name', $event_name);
+            $stmt->bindParam(':location', $location);
+            $stmt->bindParam(':event_date', $event_date);
+
+            if ($stmt->execute()) {
+                $_SESSION['success'] = 'Event created successfully!';
+            } else {
+                $_SESSION['error'] = 'Failed to create event. Please try again.';
+            }
+            header('Location: ?page=events');
+            exit();
+        }
+
+        $this->loadView('create_event.php');
+    }
+
+    private function handleResourceSharing() {
+        $filters = [];
+
+        if (isset($_GET['location']) && !empty($_GET['location'])) {
+            $filters['location'] = $_GET['location'];
+        }
+        if (isset($_GET['date']) && !empty($_GET['date'])) {
+            $filters['date'] = $_GET['date'];
+        }
+
+        $controller = new ResourceSharingController();
+        $resources = $controller->getResources($filters);
+        $this->loadView('resource_sharing.php', ['resources' => $resources]);
+    }
+
+    private function handleAdminDashboard() {
+        if (!isset($_SESSION['user'])) {
+            echo "No user session found. Redirecting to login.";
+            header("Location: ?page=login");
+            exit;
+        }
+
+        $user = $_SESSION['user'];
+
+        if ($user['role'] !== 'admin') {
+            echo "Access Denied: You are not an admin.";
+            header("Location: ?page=login");
+            exit;
+        }
+
+        $database = new Database();
+        $pdo = $database->connect();
+
+        $controller = new DashboardController($pdo);
+        $pendingRequests = $controller->getPendingRequests();
+        $this->loadView('auth/adminDashboard.php', ['pendingRequests' => $pendingRequests]);
+    }
 }
+
+
 ?>
